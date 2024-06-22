@@ -63,7 +63,7 @@ Shsc is a dynamically and weakly typed language with coercion rules that make se
     - [Special types](#special-types)
     - [Hidden types](#hidden-types)
     - [Special global variables](#special-global-variables)
-    - [Global variables for types](#global-variables-for-types)
+    - [Global Variables for Types](#global-variables-for-types)
     - [Memory management](#memory-management)
     - [Memory allocation](#memory-allocation)
         - [Example](#example-4)
@@ -607,12 +607,15 @@ var u = (x = 4) if true else "hi"
 The language supports the following `built-in` literals.
 - `bul` Boolean
 - `chr` String character
-- `i64` 64-bit integer
+- `i64` 64-bit signed integer
 - `f64` 64-bit float
 - `str` ASCII string
 - `lst` Dynamic valued list
 - `map` String to any hash map
 - `null` Null data
+- `proc` Pointer to existing procedure
+- `lambda` Lambda (anonymous) function
+- `libhandle` Shared library handle data
 
 ### Coercion Rules
 - Any built-in can be coerced to a string.
@@ -634,8 +637,10 @@ The language supports the following `built-in` literals.
 These variables must not be assigned to or else the user may face issues.
 - `lf` chr value equal to `'\n'`
 - `null` null data
+- `globals` map of global variables
+- `Types` map of type names to type values
 
-### Global variables for types
+### Global Variables for Types
 These variables must not be assigned to or else the user may face issues.
 - `bul` i64 value indicating the bul type
 - `chr` i64 value indicating the chr type
@@ -644,7 +649,10 @@ These variables must not be assigned to or else the user may face issues.
 - `str` i64 value indicating the str type
 - `lst` i64 value indicating the lst type
 - `map` i64 value indicating the map type
+- `null` i64 value indicating the null type
 - `proc` i64 value indicating the proc type
+- `lambda` i64 value indicating the lambda type
+- `libhandle` i64 value indicating the libhandle type
 
 The term `built-in` is more accurate for these and we will not call these *primitive*s.
 The language has built-in support for complex composite data structures which can be used using the literals syntax.
@@ -675,6 +683,7 @@ Ownership in our case is being able to destroy the data (free memory).
 The following takes memory ownership
 - Any variable to whom data is assigned (until reassigned)
 - Accumulator; or else procedure returns won't work (temporarily)
+- Intermediate results are owned by 2 internal temporary variables
 
 #### Accumulator
 The language uses a temporary location called the `accumulator` to store the result of operations and return values.
@@ -778,7 +787,7 @@ The language supports the following built-in procedures (within built-in modules
 | -      | -       | -        | libsym  | -     | -       | -   | -   | reverse | reverse | -        |
 | -      | -       | -        | -       | -     | -       | -   | -   | substr  | sublist | keys     |
 | -      | -       | -        | -       | -     | -       | -   | -   | find    | find    | find     |
-| -      | -       | -        | -       | -     | -       | -   | -   | split   | join    | lockonce |
+| -      | -       | -        | -       | -     | -       | -   | -   | split   | join    | -        |
 | -      | -       | -        | -       | -     | -       | -   | -   | toi64   | -       | -        |
 | -      | -       | -        | -       | -     | -       | -   | -   | tof64   | -       | -        |
 | -      | -       | -        | -       | -     | -       | -   | -   | sort    | sort    | -        |
