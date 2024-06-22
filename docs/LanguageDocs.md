@@ -771,6 +771,25 @@ Note how order of keys is not maintained.
 
 Also note how data is stringified during conversion to string (printing).
 
+### Map with `const` Keys
+A map can have `const` keys which prevent modification of the key.
+
+```lua
+proc main()
+    var p = {}
+    p.x = const 5
+    p.x = 11
+end
+```
+
+Note that keys can't be const marked using the map literal syntax. Instead it uses the [`lazy const`](#lazy-const) syntax.
+
+**Output:**
+```
+shsc: test.shsc:4: cannot modify const variable
+    at main:main (test.shsc:4)
+```
+
 ## Built-in procedures
 The language supports the following built-in procedures (within built-in modules)
 
