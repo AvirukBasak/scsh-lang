@@ -767,23 +767,23 @@ Also note how data is stringified during conversion to string (printing).
 ## Built-in procedures
 The language supports the following built-in procedures (within built-in modules)
 
-| -      | assert  | dbg      | io      | it    | chr     | i64 | f64 | str     | lst     | map    |
-|--------|---------|----------|---------|-------|---------|-----|-----|---------|---------|--------|
-| isnull | type    | typename | print   | len   | max     | max | max | equals  | equals  | -      |
-| tostr  | equals  | refcnt   | input   | clone | min     | min | min | compare | compare | -      |
-| type   | notnull | id       | fexists | -     | isdigit | -   | -   | tolower | -       | -      |
-| cast   | -       | callproc | fread   | -     | isalpha | -   | -   | toupper | -       | -      |
-| -      | -       | filename | fwrite  | -     | isalnum | -   | -   | append  | append  | set    |
-| -      | -       | lineno   | fappend | -     | islower | -   | -   | insert  | insert  | get    |
-| -      | -       | -        | libopen | -     | isupper | -   | -   | erase   | erase   | erase  |
-| -      | -       | -        | libsym  | -     | isspace | -   | -   | concat  | concat  | concat |
-| -      | -       | -        | -       | -     | -       | -   | -   | reverse | reverse | -      |
-| -      | -       | -        | -       | -     | -       | -   | -   | substr  | sublist | keys   |
-| -      | -       | -        | -       | -     | -       | -   | -   | find    | find    | find   |
-| -      | -       | -        | -       | -     | -       | -   | -   | split   | join    | -      |
-| -      | -       | -        | -       | -     | -       | -   | -   | toi64   | -       | -      |
-| -      | -       | -        | -       | -     | -       | -   | -   | tof64   | -       | -      |
-| -      | -       | -        | -       | -     | -       | -   | -   | sort    | sort    | -      |
+| -      | assert  | dbg      | io      | it    | chr     | i64 | f64 | str     | lst     | map      |
+|--------|---------|----------|---------|-------|---------|-----|-----|---------|---------|----------|
+| isnull | type    | typename | print   | len   | max     | max | max | equals  | equals  | -        |
+| tostr  | equals  | refcnt   | println | clone | min     | min | min | compare | compare | -        |
+| type   | notnull | id       | input   | -     | isdigit | -   | -   | tolower | -       | -        |
+| cast   | -       | callproc | fexists | -     | isalpha | -   | -   | toupper | -       | -        |
+| -      | -       | filename | fread   | -     | isalnum | -   | -   | append  | append  | set      |
+| -      | -       | lineno   | fwrite  | -     | islower | -   | -   | insert  | insert  | get      |
+| -      | -       | -        | fappend | -     | isupper | -   | -   | erase   | erase   | erase    |
+| -      | -       | -        | libopen | -     | isspace | -   | -   | concat  | concat  | concat   |
+| -      | -       | -        | libsym  | -     | -       | -   | -   | reverse | reverse | -        |
+| -      | -       | -        | -       | -     | -       | -   | -   | substr  | sublist | keys     |
+| -      | -       | -        | -       | -     | -       | -   | -   | find    | find    | find     |
+| -      | -       | -        | -       | -     | -       | -   | -   | split   | join    | lockonce |
+| -      | -       | -        | -       | -     | -       | -   | -   | toi64   | -       | -        |
+| -      | -       | -        | -       | -     | -       | -   | -   | tof64   | -       | -        |
+| -      | -       | -        | -       | -     | -       | -   | -   | sort    | sort    | -        |
 
 #### Globally available
 - `isnull(any)` returns true if data is `null`, else false
@@ -813,7 +813,11 @@ The language supports the following built-in procedures (within built-in modules
 File I/O functions will not create a file if it doesn't exist.
 
 - `io:print(any, ...)` prints string form of data (calls `tostr`)
+<<<<<<< HEAD
 - `io:println(any, ...)` prints string form of data (calls `tostr`) and appends a newline
+=======
+- `io:printl(any, ...)` prints string form of data (calls `tostr`) and appends a newline
+>>>>>>> 034ae54 (updated language docs)
 - `io:input(str, i64)` where the first argument is the prompt and the second argument is the type of input, see the [`Types`](#the-global-types-map) map
 - `io:fexists(str)` returns true if file exists, else false
 - `io:fread(str)` reads a file and returns a string; the first argument is the file path
