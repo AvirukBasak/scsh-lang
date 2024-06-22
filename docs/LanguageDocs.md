@@ -412,25 +412,23 @@ end
 
 ### Procedure arguments
 
-#### Example
-Four ways to access the first (0th) argument to a procedure.
+##### Deprecated
+
+**Example:**
 ```lua
 var x = $0
 var y = $[0]
 var z = $(0)
 var w = args[0]
 ```
-
+Four ways to access the first (0th) argument to a procedure.
 Arguments to a procedure is defined by the actual parameters (i.e. at the caller side).
-
-Procedures have no prototypes or formal parameters.
+Procedures have no prototypes.
 
 Arguments are stored in the `args` built-in `lst` type variable.
-
 However, you may access arguments using the syntax `$i` where `i` is and identifier or literal that evaluates to a valid `i64` index.
 
 You may also use `$(expr)` or `$[expr]` where `expr` is an expression that evaluates to a valid `i64` index.
-
 Of course, you may also use the `args` list to access the arguments, as in `args[expr]`.
 
 ### Named arguments
@@ -813,11 +811,7 @@ The language supports the following built-in procedures (within built-in modules
 File I/O functions will not create a file if it doesn't exist.
 
 - `io:print(any, ...)` prints string form of data (calls `tostr`)
-<<<<<<< HEAD
 - `io:println(any, ...)` prints string form of data (calls `tostr`) and appends a newline
-=======
-- `io:printl(any, ...)` prints string form of data (calls `tostr`) and appends a newline
->>>>>>> 034ae54 (updated language docs)
 - `io:input(str, i64)` where the first argument is the prompt and the second argument is the type of input, see the [`Types`](#the-global-types-map) map
 - `io:fexists(str)` returns true if file exists, else false
 - `io:fread(str)` reads a file and returns a string; the first argument is the file path
