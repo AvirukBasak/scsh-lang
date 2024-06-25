@@ -793,23 +793,23 @@ shsc: test.shsc:4: cannot modify const variable
 ## Built-in procedures
 The language supports the following built-in procedures (within built-in modules)
 
-| -      | assert  | dbg      | io      | it    | chr     | i64 | f64 | str     | lst     | map      |
-|--------|---------|----------|---------|-------|---------|-----|-----|---------|---------|----------|
-| isnull | type    | typename | print   | len   | max     | max | max | equals  | equals  | -        |
-| tostr  | equals  | refcnt   | println | clone | min     | min | min | compare | compare | -        |
-| type   | notnull | id       | input   | -     | isdigit | -   | -   | tolower | -       | -        |
-| cast   | -       | callproc | fexists | -     | isalpha | -   | -   | toupper | -       | -        |
-| -      | -       | filename | fread   | -     | isalnum | -   | -   | append  | append  | set      |
-| -      | -       | lineno   | fwrite  | -     | islower | -   | -   | insert  | insert  | get      |
-| -      | -       | -        | fappend | -     | isupper | -   | -   | erase   | erase   | erase    |
-| -      | -       | -        | libopen | -     | isspace | -   | -   | concat  | concat  | concat   |
-| -      | -       | -        | libsym  | -     | -       | -   | -   | reverse | reverse | -        |
-| -      | -       | -        | -       | -     | -       | -   | -   | substr  | sublist | keys     |
-| -      | -       | -        | -       | -     | -       | -   | -   | find    | find    | find     |
-| -      | -       | -        | -       | -     | -       | -   | -   | split   | join    | -        |
-| -      | -       | -        | -       | -     | -       | -   | -   | toi64   | -       | -        |
-| -      | -       | -        | -       | -     | -       | -   | -   | tof64   | -       | -        |
-| -      | -       | -        | -       | -     | -       | -   | -   | sort    | sort    | -        |
+| -       | assert  | dbg           | io      | it    | chr     | i64 | f64 | str     | lst     | map      |
+|---------|---------|---------------|---------|-------|---------|-----|-----|---------|---------|----------|
+| isnull  | type    | typename      | print   | len   | max     | max | max | equals  | equals  | -        |
+| tostr   | equals  | refcnt        | println | clone | min     | min | min | compare | compare | -        |
+| type    | notnull | id            | input   | -     | isdigit | -   | -   | tolower | -       | -        |
+| cast    | -       | callproc      | fexists | -     | isalpha | -   | -   | toupper | -       | -        |
+| max     | -       | filename      | fread   | -     | isalnum | -   | -   | append  | append  | set      |
+| min     | -       | lineno        | fwrite  | -     | islower | -   | -   | insert  | insert  | get      |
+| -       | -       | timenow       | fappend | -     | isupper | -   | -   | erase   | erase   | erase    |
+| -       | -       | timenow_param | libopen | -     | isspace | -   | -   | concat  | concat  | concat   |
+| -       | -       | -             | libsym  | -     | -       | -   | -   | reverse | reverse | -        |
+| -       | -       | -             | -       | -     | -       | -   | -   | substr  | sublist | keys     |
+| -       | -       | -             | -       | -     | -       | -   | -   | find    | find    | find     |
+| -       | -       | -             | -       | -     | -       | -   | -   | split   | join    | -        |
+| -       | -       | -             | -       | -     | -       | -   | -   | toi64   | -       | -        |
+| -       | -       | -             | -       | -     | -       | -   | -   | tof64   | -       | -        |
+| -       | -       | -             | -       | -     | -       | -   | -   | sort    | sort    | -        |
 
 #### Globally available
 - `isnull(any)` returns true if data is `null`, else false
@@ -834,6 +834,8 @@ The language supports the following built-in procedures (within built-in modules
 - `dbg:callproc(any, str, str, lst)` calls a procedure from a module; the first argument is the context object, the second argument is the module name, the third argument is the procedure name, and the fourth argument is the list of arguments to the procedure
 - `dbg:filename()` returns filename of the source file where called
 - `dbg:lineno()` returns line number of the source file where called
+- `dbg:timenow()` returns current time in milliseconds since epoch
+- `dbg:timenow_param(i64?)` returns time as a map with keys for each unit; optional argument is time in milliseconds
 
 #### Module `io`
 File I/O functions will not create a file if it doesn't exist.
