@@ -1,3 +1,4 @@
+# returns a tuple with a success value and an error message
 proc returns_error(flag)
     if flag then
         return ["success", null]
