@@ -259,7 +259,7 @@ trm:
 
 /* Push module name to a stack */
 module:
-    { ast_ModuleStack_push(ast_Identifier(strdup("main"))); } program { ast_ModuleStack_pop(); }
+    nws { ast_ModuleStack_push(ast_Identifier(strdup("main"))); } program { ast_ModuleStack_pop(); }
     | "module" identifier trm { ast_ModuleStack_push($2); } program { ast_ModuleStack_pop(); }
     ;
 
