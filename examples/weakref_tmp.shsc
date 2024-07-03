@@ -1,3 +1,4 @@
+# the following will cause memory leak
 proc foo()
     var x = weak [1, 2, 3]
     x[2] = 5
