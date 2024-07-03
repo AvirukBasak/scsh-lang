@@ -1,0 +1,48 @@
+src/parser.y: warning: 1 reduce/reduce conflict [-Wconflicts-rr]
+src/parser.y: warning: reduce/reduce conflict on token ")" [-Wcounterexamples]
+  First example: nws $@1 program "proc" identifier "start" nwp "return" "(" identifier • ")" "->" primary_expression "=" assignment_expression trm statements "end" trm "<eof>"
+  First reduce derivation
+    $accept
+    ↳ 0: module                                                                                                                                                                                                                                    "<eof>"
+         ↳ 10: nws $@1 program
+                       ↳ 14: program procedure
+                                     ↳ 15: "proc" identifier "start" nwp statements                                                                                                                                                      "end" trm
+                                                                         ↳ 22: statement                                                                                                                                      statements
+                                                                               ↳ 26: "return" expression                                                                                                                  trm
+                                                                                              ↳ 60: assignment_expression
+                                                                                                    ↳ 62: postfix_expression                                                                    "=" assignment_expression
+                                                                                                          ↳ 122: primary_expression
+                                                                                                                 ↳ 135: literal
+                                                                                                                        ↳ 163: lambda_literal
+                                                                                                                               ↳ 173: "(" fnargs_list               ")" "->" primary_expression
+                                                                                                                                          ↳ 18: identifier nws
+                                                                                                                                                           ↳ 1: ε •
+  Second example: nws $@1 program "proc" identifier "start" nwp "return" "(" identifier • ")" "=" assignment_expression trm statements "end" trm "<eof>"
+  Second reduce derivation
+    $accept
+    ↳ 0: module                                                                                                                                                                                                                                                                                       "<eof>"
+         ↳ 10: nws $@1 program
+                       ↳ 14: program procedure
+                                     ↳ 15: "proc" identifier "start" nwp statements                                                                                                                                                                                                         "end" trm
+                                                                         ↳ 22: statement                                                                                                                                                                                         statements
+                                                                               ↳ 26: "return" expression                                                                                                                                                                     trm
+                                                                                              ↳ 60: assignment_expression
+                                                                                                    ↳ 62: postfix_expression                                                                                                                       "=" assignment_expression
+                                                                                                          ↳ 122: primary_expression
+                                                                                                                 ↳ 137: "(" expression                                                                                                         ")"
+                                                                                                                            ↳ 60: assignment_expression
+                                                                                                                                  ↳ 61: conditional_expression
+                                                                                                                                        ↳ 82: logical_or_expression
+                                                                                                                                              ↳ 84: logical_and_expression
+                                                                                                                                                    ↳ 86: bitwise_or_expression
+                                                                                                                                                          ↳ 88: bitwise_xor_expression
+                                                                                                                                                                ↳ 90: bitwise_and_expression
+                                                                                                                                                                      ↳ 92: equality_expression
+                                                                                                                                                                            ↳ 94: relational_expression
+                                                                                                                                                                                  ↳ 97: shift_expression
+                                                                                                                                                                                        ↳ 102: additive_expression
+                                                                                                                                                                                               ↳ 106: multiplicative_expression
+                                                                                                                                                                                                      ↳ 109: unary_expression
+                                                                                                                                                                                                             ↳ 115: postfix_expression
+                                                                                                                                                                                                                    ↳ 122: primary_expression
+                                                                                                                                                                                                                           ↳ 136: identifier •
