@@ -591,10 +591,10 @@ map_literal:
     ;
 
 lambda_literal:
-    "(" ")" "->" "{" nwp statements "}"                                                            { $$ = ast_Literal_lambda_block(NULL, $6); }
-    | "(" fnargs_list ")" "->" "{" nwp statements "}"                                              { $$ = ast_Literal_lambda_block($2, $7); }
-    | "(" ")" "->" expression                                                                      { $$ = ast_Literal_lambda_expr(NULL, $4); }
-    | "(" fnargs_list ")" "->" expression                                                          { $$ = ast_Literal_lambda_expr($2, $5); }
+    "proc" "(" ")" "{" nwp statements "}"                                                          { $$ = ast_Literal_lambda_block(NULL, $6); }
+    | "proc" "(" fnargs_list ")" "{" nwp statements "}"                                            { $$ = ast_Literal_lambda_block($3, $7); }
+    | "(" ")" "->" primary_expression                                                              { $$ = ast_Literal_lambda_expr(NULL, $4); }
+    | "(" fnargs_list ")" "->" primary_expression                                                  { $$ = ast_Literal_lambda_expr($2, $5); }
     ;
 
 identifier:
