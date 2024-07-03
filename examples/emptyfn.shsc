@@ -4,7 +4,7 @@ proc test()
 end
 
 proc main()
-    var x = () -> {
+    var x = proc () {
     }
     io:println(dbg:typename(x), x())
     io:println(dbg:typename(test), test())
