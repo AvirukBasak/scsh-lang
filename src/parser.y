@@ -345,7 +345,7 @@ for_block:
 
 block:
     "block" nwp statements "end"                                                                   { $$ = ast_Block($3); }
-    | "{" nwp statements "}"                                                                       { $$ = ast_Block($3); }
+    | "block" "{" nwp statements "}"                                                               { $$ = ast_Block($4); }
     ;
 
 condition:
