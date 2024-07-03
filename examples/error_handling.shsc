@@ -1,3 +1,4 @@
+# returns a tuple with a success value and an error message
 proc returns_error(flag)
     if flag then
         return ["success", null]
@@ -8,7 +9,7 @@ end
 
 proc main()
     var flag = io:input("Enter true or false (1 or 0): ", Types.BUL)
-    var res, err = returns_error(flag)
+    var (res, err) = returns_error(flag)
     if err then
         errndie("error: something went wrong", 123)
     end

@@ -301,6 +301,7 @@ rt_Data_t rt_Data_clone(const rt_Data_t var)
 
 void rt_Data_destroy_circular(rt_Data_t *var, bool flag)
 {
+    if (!var) return;
     /* if ref is weak, don't free it */
     if (var->is_weak) return;
     switch (var->type) {

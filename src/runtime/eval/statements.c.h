@@ -12,7 +12,12 @@
 
 rt_ControlStatus_t rt_eval_Statements(const ast_Statements_t *code)
 {
-    if (!code) return rt_CTRL_PASS;
+    if (!code) {
+        /* if there is no statement, return null */
+        rt_VarTable_acc_setval(rt_Data_null());
+        return rt_CTRL_PASS;
+    }
+
     const ast_Statements_t *ptr = code;
     while (ptr) {
         /* during execution of last statement, if current proc is main:main
@@ -20,8 +25,8 @@ rt_ControlStatus_t rt_eval_Statements(const ast_Statements_t *code)
            to rt_Data_i64(0) */
         rt_Data_t exit_code = rt_Data_null();
         if (   !ptr->statements
-            && !strcmp(rt_VarTable_top_proc()->module_name, "main")
-            && !strcmp(rt_VarTable_top_proc()->proc_name, "main")
+            && !strcmp(rt_VarTable_top_proc()->module_name, ast_util_MODULEANDPROCTABLE_IDFMAIN)
+            && !strcmp(rt_VarTable_top_proc()->proc_name, ast_util_MODULEANDPROCTABLE_IDFMAIN)
             && ptr->statement && ptr->statement->type != STATEMENT_TYPE_RETURN) {
             exit_code = rt_Data_i64(0);
         }

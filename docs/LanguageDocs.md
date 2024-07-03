@@ -48,6 +48,8 @@ Shsc is a dynamically and weakly typed language with coercion rules that make se
     - [Procedure Context](#procedure-context)
     - [Rudimentary OOP](#rudimentary-oop)
 - [Lambdas](#lambdas)
+- [Syntax Conflicts](#syntax-conflicts)
+    - [R/R Conflict 1](#rr-conflict-1)
 - [Interop with C](#interop-with-c)
 - [Expressions](#expressions)
     - [Ternary Expression](#ternary-expression)
@@ -218,8 +220,8 @@ end
 Destructuring assignment is supported for lists and maps.
 ```lua
 proc main()
-    var key1, key2 = { key1: "hello", key2: "world", key3: "!" }
-    var a, b, c = [1, 2, 3, 4, 5, 6]
+    var (key1, key2) = { key1: "hello", key2: "world", key3: "!" }
+    var (a, b, c) = [1, 2, 3, 4, 5, 6]
     io:println(key1, key2)
     io:println(a, b, c)
 end
@@ -276,6 +278,11 @@ Note that not using `weak` in a circular reference will cause a memory leak beca
 - The `weak` keyword can be used only after the `=` operator.
 - It can be used in variable declaration as well as assignment.
 - It can be used in conjunction with `const` keyword.
+- Using `weak` on a literal will cause memory leak.
+    ```lua
+    # This will cause memory leak
+    var x = weak { a: "some data", b: {} }
+    ```
 
 ### Semicolons
 Newlines or semicolons can be used to terminate a statement.
@@ -380,7 +387,7 @@ Creates an unnamed scope.
 
 **Example:**
 ```lua
-{
+block {
     var x = 5
     io:print(x, lf)
 }
@@ -547,13 +554,41 @@ Lambdas also support context objects.
 
 **Example:**
 ```lua
-var add = (a, b) -> a + b
-var long_proc = (a, b) -> {
+var add = (a, b) -> (a + b)
+var long_proc = proc (a, b) {
     var x = a + b
     return x
 }
 io:print(add(5, 6), lf)
 io:print(long_proc(5, 6), lf)
+```
+
+## Syntax Conflicts
+
+The following syntax conflicts exist in the language. Using the following syntax may result in undefined behaviour.
+This is because while the current parser may behave in a specific way, in later revisions the behaviour may change.
+
+### R/R Conflict 1
+
+In the current parser, the 1st example will be accepted, while the 2nd will raise an error.
+The `•` shows the position of the conflict.
+
+See [`docs/BisonConflicts.md`](BisonConflicts.txt) for `-Wcounterexamples` output.
+
+**Example 1:**
+```lua
+proc foo()
+    var y = 5
+    return (x • ) -> 5
+end
+```
+
+**Example 2:**
+```lua
+proc foo()
+    var x = 7
+    return (x • ) = 5
+end
 ```
 
 ## Interop with C

@@ -259,7 +259,7 @@ trm:
 
 /* Push module name to a stack */
 module:
-    { ast_ModuleStack_push(ast_Identifier(strdup("main"))); } program { ast_ModuleStack_pop(); }
+    nws { ast_ModuleStack_push(ast_Identifier(strdup("main"))); } program { ast_ModuleStack_pop(); }
     | "module" identifier trm { ast_ModuleStack_push($2); } program { ast_ModuleStack_pop(); }
     ;
 
@@ -304,17 +304,17 @@ statement:
     ;
 
 assignment:
-    "var" identifier "=" expression                      /* shadow or create new var */            { $$ = ast_Assignment_create($2, $4, false, false); }
-    | "var" identifier "=" "const" expression            /* create new constant */                 { $$ = ast_Assignment_create($2, $5, true, false); }
-    | "var" identifier "=" "weak" expression             /* create weak ref */                     { $$ = ast_Assignment_create($2, $5, false, true); }
-    | "var" identifier "=" "const" "weak" expression     /* create const weak ref */               { $$ = ast_Assignment_create($2, $6, true, true); }
-    | "var" identifier "=" "weak" "const" expression     /* create const weak ref */               { $$ = ast_Assignment_create($2, $6, true, true); }
-    | "var" fnargs_list "=" expression                   /* destructuring assignment */            { $$ = ast_Assignment_destructure($2, $4, false, false); }
-    | "var" fnargs_list "=" "const" expression           /* destructuring assignment */            { $$ = ast_Assignment_destructure($2, $5, true, false); }
-    | "var" fnargs_list "=" "weak" expression            /* destructuring assignment */            { $$ = ast_Assignment_destructure($2, $5, false, true); }
-    | "var" fnargs_list "=" "const" "weak" expression    /* destructuring assignment */            { $$ = ast_Assignment_destructure($2, $6, true, true); }
-    | "var" fnargs_list "=" "weak" "const" expression    /* destructuring assignment */            { $$ = ast_Assignment_destructure($2, $6, true, true); }
-    | expression                                         /* assignment to void */                  { $$ = ast_Assignment_tovoid($1); }
+    "var" identifier "=" expression                              /* shadow or create new var */    { $$ = ast_Assignment_create($2, $4, false, false); }
+    | "var" identifier "=" "const" expression                    /* create new constant */         { $$ = ast_Assignment_create($2, $5, true, false); }
+    | "var" identifier "=" "weak" expression                     /* create weak ref */             { $$ = ast_Assignment_create($2, $5, false, true); }
+    | "var" identifier "=" "const" "weak" expression             /* create const weak ref */       { $$ = ast_Assignment_create($2, $6, true, true); }
+    | "var" identifier "=" "weak" "const" expression             /* create const weak ref */       { $$ = ast_Assignment_create($2, $6, true, true); }
+    | "var" "(" fnargs_list ")" "=" expression                   /* destructuring assignment */    { $$ = ast_Assignment_destructure($3, $6, false, false); }
+    | "var" "(" fnargs_list ")" "=" "const" expression           /* destructuring assignment */    { $$ = ast_Assignment_destructure($3, $7, true, false); }
+    | "var" "(" fnargs_list ")" "=" "weak" expression            /* destructuring assignment */    { $$ = ast_Assignment_destructure($3, $7, false, true); }
+    | "var" "(" fnargs_list ")" "=" "const" "weak" expression    /* destructuring assignment */    { $$ = ast_Assignment_destructure($3, $8, true, true); }
+    | "var" "(" fnargs_list ")" "=" "weak" "const" expression    /* destructuring assignment */    { $$ = ast_Assignment_destructure($3, $8, true, true); }
+    | expression                                                 /* assignment to void */          { $$ = ast_Assignment_tovoid($1); }
     ;
 
 compound_statement:
@@ -350,7 +350,7 @@ for_block:
 
 block:
     "block" nwp statements "end"                                                                   { $$ = ast_Block($3); }
-    | "{" nwp statements "}"                                                                       { $$ = ast_Block($3); }
+    | "block" "{" nwp statements "}"                                                               { $$ = ast_Block($4); }
     ;
 
 condition:
@@ -596,10 +596,10 @@ map_literal:
     ;
 
 lambda_literal:
-    "(" ")" "->" "{" nwp statements "}"                                                            { $$ = ast_Literal_lambda_block(NULL, $6); }
-    | "(" fnargs_list ")" "->" "{" nwp statements "}"                                              { $$ = ast_Literal_lambda_block($2, $7); }
-    | "(" ")" "->" expression                                                                      { $$ = ast_Literal_lambda_expr(NULL, $4); }
-    | "(" fnargs_list ")" "->" expression                                                          { $$ = ast_Literal_lambda_expr($2, $5); }
+    "proc" "(" ")" "{" nwp statements "}"                                                          { $$ = ast_Literal_lambda_block(NULL, $6); }
+    | "proc" "(" fnargs_list ")" "{" nwp statements "}"                                            { $$ = ast_Literal_lambda_block($3, $7); }
+    | "(" ")" "->" primary_expression                                                              { $$ = ast_Literal_lambda_expr(NULL, $4); }
+    | "(" fnargs_list ")" "->" primary_expression                                                  { $$ = ast_Literal_lambda_expr($2, $5); }
     ;
 
 identifier:
