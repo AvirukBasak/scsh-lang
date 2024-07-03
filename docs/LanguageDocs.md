@@ -48,8 +48,8 @@ Shsc is a dynamically and weakly typed language with coercion rules that make se
     - [Procedure Context](#procedure-context)
     - [Rudimentary OOP](#rudimentary-oop)
 - [Lambdas](#lambdas)
-- [Syntax Ambiguity](#syntax-ambiguity)
-    - [Empty Map v/s Empty Block](#empty-map-vs-empty-block)
+- [Syntax Conflicts](#syntax-conflicts)
+    - [R/R Conflict 1](#rr-conflict-1)
 - [Interop with C](#interop-with-c)
 - [Expressions](#expressions)
     - [Ternary Expression](#ternary-expression)
@@ -220,8 +220,8 @@ end
 Destructuring assignment is supported for lists and maps.
 ```lua
 proc main()
-    var key1, key2 = { key1: "hello", key2: "world", key3: "!" }
-    var a, b, c = [1, 2, 3, 4, 5, 6]
+    var (key1, key2) = { key1: "hello", key2: "world", key3: "!" }
+    var (a, b, c) = [1, 2, 3, 4, 5, 6]
     io:println(key1, key2)
     io:println(a, b, c)
 end
@@ -382,7 +382,7 @@ Creates an unnamed scope.
 
 **Example:**
 ```lua
-{
+block {
     var x = 5
     io:print(x, lf)
 }
@@ -549,8 +549,8 @@ Lambdas also support context objects.
 
 **Example:**
 ```lua
-var add = (a, b) -> a + b
-var long_proc = (a, b) -> {
+var add = (a, b) -> (a + b)
+var long_proc = proc (a, b) {
     var x = a + b
     return x
 }
@@ -558,25 +558,33 @@ io:print(add(5, 6), lf)
 io:print(long_proc(5, 6), lf)
 ```
 
-## Syntax Ambiguity
+## Syntax Conflicts
 
-It is recommended to avoid ambiguous code and they should be considered to result in undefined behaviour.
-This is because the following may be how the current parser behaves but the behaviour may change in the future.
+The following syntax conflicts exist in the language. Using the following syntax may result in undefined behaviour.
+This is because while the current parser may behave in a specific way, in later revisions the behaviour may change.
 
-### Empty Map v/s Empty Block
+### R/R Conflict 1
+
+In the current parser, the 1st example will be accepted, while the 2nd will raise an error.
+The `•` shows the position of the conflict.
+
+See [`docs/BisonConflicts.md`](BisonConflicts.txt) for `-Wcounterexamples` output.
+
+**Example 1:**
 ```lua
-var x = () -> {
-}
+proc foo()
+    var y = 5
+    return (x • ) -> 5
+end
 ```
 
-The above is in fact a lambda with no body. It returns `null`, much like any other procedure without a body.
-
-However, the following are empty maps.
+**Example 2:**
 ```lua
-var x = {}
+proc foo()
+    var x = 7
+    return (x • ) = 5
+end
 ```
-
-This behaviour also exists for [Block Statement](#block-statement) that use `{}`.
 
 ## Interop with C
 Interoperability with C code via dynamic libraries is possible. For a better understanding see the repo [shsc-c-interop](https://github.com/AvirukBasak/shsc-c-interop).
