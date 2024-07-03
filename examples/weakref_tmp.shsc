@@ -1,0 +1,8 @@
+proc foo()
+    var x = weak [1, 2, 3]
+    x[2] = 5
+end
+
+proc main()
+    io:println(foo())
+end
