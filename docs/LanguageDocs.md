@@ -278,6 +278,11 @@ Note that not using `weak` in a circular reference will cause a memory leak beca
 - The `weak` keyword can be used only after the `=` operator.
 - It can be used in variable declaration as well as assignment.
 - It can be used in conjunction with `const` keyword.
+- Using `weak` on a literal will cause memory leak.
+    ```lua
+    # This will cause memory leak
+    var x = weak { a: "some data", b: {} }
+    ```
 
 ### Semicolons
 Newlines or semicolons can be used to terminate a statement.
