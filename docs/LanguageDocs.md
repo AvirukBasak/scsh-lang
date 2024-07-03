@@ -51,7 +51,8 @@ Shsc is a dynamically and weakly typed language with coercion rules that make se
     - [Arguments to `main:main`](#arguments-to-mainmain)
     - [Procedure context](#procedure-context)
 - [Lambdas](#lambdas)
-    - [Example](#example-3)
+- [Syntax Conflicts](#syntax-conflicts)
+    - [R/R Conflict 1](#rr-conflict-1)
 - [Interop with C](#interop-with-c)
 - [Expressions](#expressions)
     - [Ternary expression](#ternary-expression)
@@ -363,7 +364,22 @@ end
 
 ## Block statement
 Creates an unnamed scope.
-It's pretty much useless.
+
+**Example:**
+```lua
+block {
+    var x = 5
+    io:print(x, lf)
+}
+```
+
+**Alternative:**
+```lua
+block
+    var x = 5
+    io:print(x, lf)
+end
+```
 
 ## Procedures
 The following is an example of a factorial program that shows how to use procedures.
@@ -519,13 +535,41 @@ Lambdas also support context objects.
 
 ### Example
 ```lua
-var add = (a, b) -> a + b
-var long_proc = (a, b) -> {
+var add = (a, b) -> (a + b)
+var long_proc = proc (a, b) {
     var x = a + b
     return x
 }
 io:print(add(5, 6), lf)
 io:print(long_proc(5, 6), lf)
+```
+
+## Syntax Conflicts
+
+The following syntax conflicts exist in the language. Using the following syntax may result in undefined behaviour.
+This is because while the current parser may behave in a specific way, in later revisions the behaviour may change.
+
+### R/R Conflict 1
+
+In the current parser, the 1st example will be accepted, while the 2nd will raise an error.
+The `•` shows the position of the conflict.
+
+See [`docs/BisonConflicts.md`](BisonConflicts.txt) for `-Wcounterexamples` output.
+
+**Example 1:**
+```lua
+proc foo()
+    var y = 5
+    return (x • ) -> 5
+end
+```
+
+**Example 2:**
+```lua
+proc foo()
+    var x = 7
+    return (x • ) = 5
+end
 ```
 
 ## Interop with C

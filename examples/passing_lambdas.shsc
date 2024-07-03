@@ -19,8 +19,8 @@ proc sort(list, comparator)
 end
 
 proc main()
-    # alternative: var cmp = (a, b) -> a - b
-    var cmp = (a, b) -> {
+    # alternative: var cmp = (a, b) -> (a - b)
+    var cmp = proc (a, b) {
         var diff = a - b
         return diff
     }
