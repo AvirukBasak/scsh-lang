@@ -17,6 +17,7 @@
 #include "runtime/data/DataMap.h"
 #include "runtime/io.h"
 #include "runtime/VarTable.h"
+#include "util.h"
 #include "tlib/khash/khash.h"
 
 
@@ -127,6 +128,37 @@ rt_Data_t *rt_VarTable_modf(rt_Data_t *dest, rt_Data_t src, bool is_const, bool 
         .lvalue = false
     };
     return dest;
+}
+
+void rt_VarTable_mkliteral(rt_Data_t value)
+{
+    /* generate a random key */
+    char random_key[RT_VTABLE_LITERAL_RANDOMKEY_LEN +1] = { '#' };
+    {
+        const char chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_";
+        const int len = strlen(chars);
+
+        for (int i = 1; i < RT_VTABLE_LITERAL_RANDOMKEY_LEN; ++i) {
+            random_key[i] = chars[util_rand() % len];
+        }
+        random_key[RT_VTABLE_LITERAL_RANDOMKEY_LEN] = '\0';
+    }
+
+    rt_VarTable_proc_t *current_proc = &(rt_vtable->procs[rt_vtable->curr_proc_ptr]);
+    rt_VarTable_Scope_t *current_scope = &(current_proc->scopes[current_proc->curr_scope_ptr]);
+    /* getref to the given key, this creates new data if it doesn't exist */
+    rt_Data_t *data = rt_DataMap_getref(*current_scope, random_key);
+    if (!data)
+        io_errndie("rt_VarTable_mkliteral:" ERR_MSG_NULLPTR);
+    /* if data is const throw error */
+    if (data->is_const) rt_throw("cannot modify const variable");
+    data->lvalue = true;
+    rt_VarTable_modf(data, value, false, false);
+
+char *op = rt_DataMap_tostr(*current_scope);
+    printf("  >> %s\n", op);
+free(op);
+
 }
 
 rt_Data_t *rt_VarTable_getref_errnull(const char *varname)
