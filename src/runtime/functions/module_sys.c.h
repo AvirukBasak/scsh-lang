@@ -10,6 +10,7 @@
 #include "runtime/functions.h"
 #include "runtime/functions/module_sys.h"
 #include "runtime/io.h"
+#include "util.h"
 
 rt_Data_t rt_fn_sys_exit()
 {
@@ -21,36 +22,12 @@ rt_Data_t rt_fn_sys_exit()
     return data;
 }
 
-#ifdef WIN32
-    #include <windows.h>
-#elif _POSIX_C_SOURCE >= 199309L
-    #include <time.h>   // for nanosleep
-#else
-    #include <unistd.h> // for usleep
-#endif
-
-/* cross-platform sleep function */
-void sleep_ms(int milliseconds){
-#ifdef WIN32
-    Sleep(milliseconds);
-#elif _POSIX_C_SOURCE >= 199309L
-    struct timespec ts;
-    ts.tv_sec = milliseconds / 1000;
-    ts.tv_nsec = (milliseconds % 1000) * 1000000;
-    nanosleep(&ts, NULL);
-#else
-    if (milliseconds >= 1000)
-    sleep(milliseconds / 1000);
-    usleep((milliseconds % 1000) * 1000);
-#endif
-}
-
 rt_Data_t rt_fn_sys_sleep()
 {
     const rt_DataList_t *args = rt_fn_get_valid_args(1);
     const rt_Data_t data = *rt_DataList_getref(args, 0);
     rt_Data_assert_type(data, rt_DATA_TYPE_I64, "arg 0");
-    sleep_ms(data.data.i64);
+    util_sleep_ms(data.data.i64);
     return rt_Data_null();
 }
 
