@@ -77,17 +77,21 @@ void rt_eval_Expression(const ast_Expression_t *expr)
         return;
     }
 
+    /* handle rhs and evaluate it
+     * NOTE: RHS is evaluated first to ensure that the changes to vartable made
+     * by rt_VarTable_mkliteral does not affect the references that are going to be held
+     * by the LHS of the expression
+     */
+    rt_Data_t rhs_ = rt_Data_null();
+    rhs_.lvalue = true;
+    rt_Data_t *rhs = rt_eval_Expression_operand(
+        expr->op, expr->rhs, expr->rhs_type, &rhs_);
+
     /* handle lhs and evaluate it */
     rt_Data_t lhs_ = rt_Data_null();
     lhs_.lvalue = true;
     rt_Data_t *lhs = rt_eval_Expression_operand(
         expr->op, expr->lhs, expr->lhs_type, &lhs_);
-
-    /* handle rhs and evaluate it */
-    rt_Data_t rhs_ = rt_Data_null();
-    rhs_.lvalue = true;
-    rt_Data_t *rhs = rt_eval_Expression_operand(
-        expr->op, expr->rhs, expr->rhs_type, &rhs_);
 
     /* handle rhs and evaluate it
        following code is disabled as the same has been moved
