@@ -154,7 +154,7 @@ void rt_VarTable_mkliteral(rt_Data_t value)
     data->lvalue = true;
     rt_VarTable_modf(data, value, false, false);
 
-#ifdef DEBUG
+#ifdef VARTABLE_DEBUG
     char *op = rt_DataMap_tostr(*current_scope);
     printf("  rt_VarTable_mkliteral: %s\n", op);
     free(op);
