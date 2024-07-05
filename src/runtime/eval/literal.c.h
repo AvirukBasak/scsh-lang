@@ -57,6 +57,15 @@ void rt_eval_Literal(const ast_Literal_t *literal)
                 rt_Data_any((void*) literal->data.any));
             break;
     }
+
+    if (   literal->type == DATA_TYPE_STR || literal->type == DATA_TYPE_INTERP_STR
+        || literal->type == DATA_TYPE_LST || literal->type == DATA_TYPE_MAP
+        || literal->type == DATA_TYPE_LAMBDA) {
+        /* if there is a valid operator in the expression,
+           put the literal in the var table to ensure that it remains
+           for the entire scope so that references to it are valid */
+        rt_VarTable_mkliteral(*RT_VTABLE_ACC);
+    }
 }
 
 #else
