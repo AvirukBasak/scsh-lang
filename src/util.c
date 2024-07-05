@@ -1,6 +1,9 @@
+#include <stdlib.h>
 #include <inttypes.h>
 #include <time.h>
 
+#include "globals.h"
+#include "util.h"
 
 #ifdef _WIN32
     #include <windows.h>
@@ -11,6 +14,12 @@
     #include <unistd.h>
 #endif
 
+int util_rand()
+{
+    srand(global_rng_state_seed);
+    global_rng_state_seed ^= rand() ^ util_gettime_ms();
+    return rand();
+}
 
 uint64_t util_gettime_ms()
 {
