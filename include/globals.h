@@ -10,4 +10,6 @@
 extern const char *global_currfile;
 extern bool global_lex_dbg;
 
+extern int global_rng_state_seed;
+
 #endif

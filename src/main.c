@@ -10,11 +10,15 @@
 #include "lexer.h"
 #include "parser.h"
 #include "runtime.h"
+#include "util.h"
 
 void main_parsefiles(const char **filepaths, int file_cnt);
 
 int main(int argc, char **argv)
 {
+    /* global variables */
+    global_rng_state_seed = (int) util_gettime_ms();
+
     if (argc < 2) io_errnexit("no args provided");
 
     char **lines = NULL;
