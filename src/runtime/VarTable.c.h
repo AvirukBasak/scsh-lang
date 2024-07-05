@@ -182,11 +182,6 @@ void rt_VarTable_mkliteral(rt_Data_t value)
     if (data->is_const) rt_throw("cannot modify const variable");
     data->lvalue = true;
     rt_VarTable_modf(data, value, false, false);
-
-char *op = rt_DataMap_tostr(*current_scope);
-    printf("  >> %s\n", op);
-free(op);
-
 }
 
 rt_Data_t *rt_VarTable_getref_errnull(const char *varname)
