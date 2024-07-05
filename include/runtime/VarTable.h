@@ -15,6 +15,7 @@
 #define RT_VTABLE_CALLSTACK_LIMIT           (1000)
 #define RT_VTABLE_ACC                       (rt_VarTable_acc_get()->adr ? rt_VarTable_acc_get()->adr : &rt_VarTable_acc_get()->val)
 #define RT_VTABLE_LITERAL_RANDOMKEY_LEN     (12)
+#define RT_VTABLE_LITERAL_RANDOMKEY_PREFIX  ('#')
 
 
 typedef rt_DataMap_t *rt_VarTable_Scope_t;

@@ -133,7 +133,7 @@ rt_Data_t *rt_VarTable_modf(rt_Data_t *dest, rt_Data_t src, bool is_const, bool 
 void rt_VarTable_mkliteral(rt_Data_t value)
 {
     /* generate a random key */
-    char random_key[RT_VTABLE_LITERAL_RANDOMKEY_LEN +1] = { '#' };
+    char random_key[RT_VTABLE_LITERAL_RANDOMKEY_LEN +1] = { RT_VTABLE_LITERAL_RANDOMKEY_PREFIX };
     {
         const char chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_";
         const int len = strlen(chars);
@@ -146,7 +146,6 @@ void rt_VarTable_mkliteral(rt_Data_t value)
 
     rt_VarTable_proc_t *current_proc = &(rt_vtable->procs[rt_vtable->curr_proc_ptr]);
     rt_VarTable_Scope_t *current_scope = &(current_proc->scopes[current_proc->curr_scope_ptr]);
-    /* getref to the given key, this creates new data if it doesn't exist */
     rt_Data_t *data = rt_DataMap_getref(*current_scope, random_key);
     if (!data)
         io_errndie("rt_VarTable_mkliteral:" ERR_MSG_NULLPTR);
@@ -155,10 +154,11 @@ void rt_VarTable_mkliteral(rt_Data_t value)
     data->lvalue = true;
     rt_VarTable_modf(data, value, false, false);
 
-char *op = rt_DataMap_tostr(*current_scope);
-    printf("  >> %s\n", op);
-free(op);
-
+#ifdef DEBUG
+    char *op = rt_DataMap_tostr(*current_scope);
+    printf("  rt_VarTable_mkliteral: %s\n", op);
+    free(op);
+#endif
 }
 
 rt_Data_t *rt_VarTable_getref_errnull(const char *varname)
