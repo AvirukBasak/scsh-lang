@@ -27,6 +27,7 @@ typedef enum {
     rt_fn_ERRNDIE,       /* errndie */
     rt_fn_MAX,           /* max */
     rt_fn_MIN,           /* min */
+    rt_fn_RAND,          /* rand */
 
     rt_fn_SYS_EXIT,      /* sys:exit */
     rt_fn_SYS_SLEEP,     /* sys:sleep */

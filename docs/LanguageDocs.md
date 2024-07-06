@@ -866,7 +866,7 @@ The language supports the following built-in procedures (within built-in modules
 | errndie | sleep    | -       | filename      | fread   | -     | isalnum | -   | -   | append  | append  | set      |
 | max     |          | -       | lineno        | fwrite  | -     | islower | -   | -   | insert  | insert  | get      |
 | min     |          | -       | timenow       | fappend | -     | isupper | -   | -   | erase   | erase   | erase    |
-| -       |          | -       | timenow_param | libopen | -     | isspace | -   | -   | concat  | concat  | concat   |
+| rand    |          | -       | timenow_param | libopen | -     | isspace | -   | -   | concat  | concat  | concat   |
 | -       |          | -       | -             | libsym  | -     | -       | -   | -   | reverse | reverse | -        |
 | -       |          | -       | -             | -       | -     | -       | -   | -   | substr  | sublist | keys     |
 | -       |          | -       | -             | -       | -     | -       | -   | -   | find    | find    | find     |
@@ -885,6 +885,7 @@ The language supports the following built-in procedures (within built-in modules
 - `max(lst)` returns the greatest of the items in the list; returns `null` if list is empty
 - `min(any, ...)` returns the smallest of the arguments; returns `null` if no arguments are passed
 - `min(lst)` returns the smallest of the items in the list; returns `null` if list is empty
+- `rand()` returns a random number between 0 and 1
 
 #### Module `sys`
 - `sys:exit(i64?)` exits the program with the specified exit code (0 by default)

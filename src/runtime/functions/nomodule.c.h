@@ -11,6 +11,7 @@
 #include "runtime/functions/nomodule.h"
 #include "runtime/io.h"
 #include "runtime/VarTable.h"
+#include "util.h"
 
 rt_Data_t rt_fn_isnull()
 {
@@ -147,6 +148,12 @@ rt_Data_t rt_fn_errndie()
     free(errmsg);
 
     return rt_Data_null();
+}
+
+rt_Data_t rt_fn_rand()
+{
+    double num = (double) util_rand() / RAND_MAX;
+    return rt_Data_f64(num);
 }
 
 #else

@@ -121,6 +121,7 @@ rt_fn_FunctionDescriptor_t rt_fn_FunctionsList_getfn(const char *module, const c
     if (!strcmp(fname, "errndie"))      return rt_fn_ERRNDIE;
     if (!strcmp(fname, "max"))          return rt_fn_MAX;
     if (!strcmp(fname, "min"))          return rt_fn_MIN;
+    if (!strcmp(fname, "rand"))         return rt_fn_RAND;
 
     return rt_fn_UNDEFINED;
 }
@@ -148,6 +149,7 @@ rt_Data_t rt_fn_FunctionsList_call(rt_fn_FunctionDescriptor_t fn)
         case rt_fn_ERRNDIE:       return rt_fn_errndie();
         case rt_fn_MAX:           return rt_fn_max();
         case rt_fn_MIN:           return rt_fn_min();
+        case rt_fn_RAND:          return rt_fn_rand();
 
         case rt_fn_SYS_EXIT:      return rt_fn_sys_exit();
         case rt_fn_SYS_SLEEP:     return rt_fn_sys_sleep();
