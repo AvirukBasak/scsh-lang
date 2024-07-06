@@ -25,6 +25,13 @@
 rt_VarTable_t *rt_vtable = NULL;
 
 
+/**
+ * global location to hold tmp literals, which
+ * are merged to main scope later on
+ */
+rt_DataMap_t *rt_vtable_litmap = NULL;
+
+
 /** the accumulator */
 rt_VarTable_Acc_t rt_vtable_accumulator = {
     .val = { .data.any = NULL, .type = rt_DATA_TYPE_ANY, .is_const = false, .is_weak = false },
@@ -172,21 +179,43 @@ void rt_VarTable_mkliteral(rt_Data_t value)
         random_key[RT_VTABLE_LITERAL_RANDOMKEY_LEN] = '\0';
     }
 
-    rt_VarTable_proc_t *current_proc = &(rt_vtable->procs[rt_vtable->curr_proc_ptr]);
-    rt_VarTable_Scope_t *current_scope = &(current_proc->scopes[current_proc->curr_scope_ptr]);
-    rt_Data_t *data = rt_DataMap_getref(*current_scope, random_key);
-    if (!data)
-        io_errndie("rt_VarTable_mkliteral:" ERR_MSG_NULLPTR);
+    /* if the global map is not initialized, initialize it */
+    if (!rt_vtable_litmap) rt_vtable_litmap = rt_DataMap_init();
+    /* get a reference to the data, or create a new one */
+    rt_Data_t *data = rt_DataMap_getref(rt_vtable_litmap, random_key);
+    /* if data is null, throw error */
+    if (!data) io_errndie("rt_VarTable_mkliteral:" ERR_MSG_NULLPTR);
     /* if data is const throw error */
     if (data->is_const) rt_throw("cannot modify const variable");
+    /* make sure the data is an lvalue */
     data->lvalue = true;
+    /* modify the data and set it to the given value */
     rt_VarTable_modf(data, value, false, false);
 
 #ifdef VARTABLE_DEBUG
-    char *op = rt_DataMap_tostr(*current_scope);
+    char *op = rt_DataMap_tostr(*rt_vtable_litmap);
     printf("  rt_VarTable_mkliteral: %s\n", op);
     free(op);
 #endif
+}
+
+void rt_VarTable_destroy_litmap()
+{
+    /* this means no literals were created yet */
+    if (!rt_vtable_litmap) return;
+
+    rt_VarTable_proc_t *current_proc = &(rt_vtable->procs[rt_vtable->curr_proc_ptr]);
+    rt_VarTable_Scope_t *current_scope = &(current_proc->scopes[current_proc->curr_scope_ptr]);
+
+    if (!current_scope) io_errndie("rt_VarTable_merge_litmap:" ERR_MSG_NULLPTR);
+
+    /* merge the global map with the current scope */
+    // rt_DataMap_concat(*current_scope, rt_vtable_litmap);
+
+    /* deref the accumulator and set it by value to clear any references */
+    rt_VarTable_acc_setval(*RT_VTABLE_ACC);
+    /* destroy the global map */
+    rt_DataMap_destroy(&rt_vtable_litmap);
 }
 
 rt_Data_t *rt_VarTable_getref_errnull(const char *varname)

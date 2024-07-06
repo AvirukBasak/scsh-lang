@@ -62,8 +62,12 @@ rt_Data_t rt_VarTable_rsv_Types,
 /** create a new variable in the current scope */
 void rt_VarTable_create(const char *varname, rt_Data_t value, bool is_const, bool is_weak);
 
-/** register a literal in the current scope */
+/** register a literal in a seperate global map */
 void rt_VarTable_mkliteral(rt_Data_t value);
+
+/** clear the gloabl map from `rt_VarTable_mkliteral` for
+    reuse in the next statement */
+void rt_VarTable_destroy_litmap();
 
 /** modify data directly by address instead of querying via identifier */
 rt_Data_t *rt_VarTable_modf(rt_Data_t *dest, rt_Data_t src, bool is_const, bool is_weak);
