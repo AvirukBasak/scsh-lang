@@ -35,6 +35,7 @@ rt_fn_FunctionDescriptor_t rt_fn_FunctionsList_getfn(const char *module, const c
     }
     if (!strcmp(module, "io")) {
         if (!strcmp(fname, "print"))    return rt_fn_IO_PRINT;
+        if (!strcmp(fname, "println"))  return rt_fn_IO_PRINTLN;
         if (!strcmp(fname, "input"))    return rt_fn_IO_INPUT;
         if (!strcmp(fname, "fexists"))  return rt_fn_IO_FEXISTS;
         if (!strcmp(fname, "fread"))    return rt_fn_IO_FREAD;
@@ -154,6 +155,7 @@ rt_Data_t rt_fn_FunctionsList_call(rt_fn_FunctionDescriptor_t fn)
         case rt_fn_DBG_TIMENOW_PARAM: return rt_fn_dbg_timenow_parameterized();
 
         case rt_fn_IO_PRINT:      return rt_fn_io_print();
+        case rt_fn_IO_PRINTLN:    return rt_fn_io_println();
         case rt_fn_IO_INPUT:      return rt_fn_io_input();
         case rt_fn_IO_FEXISTS:    return rt_fn_io_fexists();
         case rt_fn_IO_FREAD:      return rt_fn_io_fread();
@@ -247,19 +249,16 @@ rt_Data_t rt_fn_call_handler(
     const ast_Identifier_t *module = (const ast_Identifier_t*) module_name;
     const ast_Identifier_t *proc = (const ast_Identifier_t*) proc_name;
 
-    /* get code as AST from user defined function */
-    const ast_Statements_t *code = ast_util_ModuleAndProcTable_get_code(module, proc);
-
     /* get a descriptor to in-built function */
-    const rt_fn_FunctionDescriptor_t fn = rt_fn_FunctionsList_getfn(
+    const rt_fn_FunctionDescriptor_t builtin_fn_desc = rt_fn_FunctionsList_getfn(
         module_name, proc_name);
 
     const char *currfile = NULL;
 
     /* update metadata to new module and function */
-    if (code) {
+    if (ast_util_ModuleAndProcTable_exists(module, proc)) {
         currfile = ast_util_ModuleAndProcTable_get_filename(module, proc);
-    } else if (fn != rt_fn_UNDEFINED) {
+    } else if (builtin_fn_desc != rt_fn_UNDEFINED) {
         currfile = module_name;
     } else {
         rt_throw("undefined procedure '%s:%s'", module_name, proc_name);
@@ -300,7 +299,9 @@ rt_Data_t rt_fn_call_handler(
         fnargs_list = fnargs_list->args_list;
     }
 
-    if (code) {
+    if (ast_util_ModuleAndProcTable_exists(module, proc)) {
+        /* get code as AST from user defined function */
+        const ast_Statements_t *code = ast_util_ModuleAndProcTable_get_code(module, proc);
         /* call user defined function */
         rt_ControlStatus_t ctrl = rt_eval_Statements(code);
         if (ctrl == rt_CTRL_BREAK)
@@ -309,7 +310,7 @@ rt_Data_t rt_fn_call_handler(
             rt_throw("unexpected `continue` statement outside loop");
     } else {
         /* call in-built function */
-        rt_VarTable_acc_setval(rt_fn_FunctionsList_call(fn));
+        rt_VarTable_acc_setval(rt_fn_FunctionsList_call(builtin_fn_desc));
     }
 
     rt_Data_t ret = rt_VarTable_pop_proc();

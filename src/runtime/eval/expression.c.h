@@ -66,7 +66,7 @@ rt_Data_t *rt_eval_Expression_operand(
     /* copy accumulator value into temporary memory as accumulator gets
        modified when evaluating other operands */
     rt_VarTable_modf(
-        oprnd_data, *RT_VTABLE_ACC, RT_VTABLE_ACC->is_const, RT_VTABLE_ACC->is_weak);
+        oprnd_data, *RT_VTABLE_ACC, false, false);
     return rt_VarTable_acc_get()->adr ? rt_VarTable_acc_get()->adr : oprnd_data;
 }
 

@@ -259,7 +259,7 @@ trm:
 
 /* Push module name to a stack */
 module:
-    { ast_ModuleStack_push(ast_Identifier(strdup("main"))); } program { ast_ModuleStack_pop(); }
+    nws { ast_ModuleStack_push(ast_Identifier(strdup("main"))); } program { ast_ModuleStack_pop(); }
     | "module" identifier trm { ast_ModuleStack_push($2); } program { ast_ModuleStack_pop(); }
     ;
 
@@ -345,7 +345,7 @@ for_block:
 
 block:
     "block" nwp statements "end"                                                                   { $$ = ast_Block($3); }
-    | "{" nwp statements "}"                                                                       { $$ = ast_Block($3); }
+    | "block" "{" nwp statements "}"                                                               { $$ = ast_Block($4); }
     ;
 
 condition:
@@ -591,10 +591,10 @@ map_literal:
     ;
 
 lambda_literal:
-    "(" ")" "->" "{" nwp statements "}"                                                            { $$ = ast_Literal_lambda_block(NULL, $6); }
-    | "(" fnargs_list ")" "->" "{" nwp statements "}"                                              { $$ = ast_Literal_lambda_block($2, $7); }
-    | "(" ")" "->" expression                                                                      { $$ = ast_Literal_lambda_expr(NULL, $4); }
-    | "(" fnargs_list ")" "->" expression                                                          { $$ = ast_Literal_lambda_expr($2, $5); }
+    "proc" "(" ")" "{" nwp statements "}"                                                          { $$ = ast_Literal_lambda_block(NULL, $6); }
+    | "proc" "(" fnargs_list ")" "{" nwp statements "}"                                            { $$ = ast_Literal_lambda_block($3, $7); }
+    | "(" ")" "->" primary_expression                                                              { $$ = ast_Literal_lambda_expr(NULL, $4); }
+    | "(" fnargs_list ")" "->" primary_expression                                                  { $$ = ast_Literal_lambda_expr($2, $5); }
     ;
 
 identifier:

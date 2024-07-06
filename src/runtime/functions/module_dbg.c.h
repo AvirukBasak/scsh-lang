@@ -2,8 +2,8 @@
 #define RT_FN_MODULE_DBG_C_H
 
 #include <stdint.h>
+#include <stdio.h>
 
-#include "io.h"
 #include "runtime/data/Data.h"
 #include "runtime/data/DataStr.h"
 #include "runtime/data/DataList.h"
@@ -12,6 +12,7 @@
 #include "runtime/io.h"
 #include "runtime/functions/module_dbg.h"
 #include "runtime/VarTable.h"
+#include "util.h"
 
 rt_Data_t rt_fn_dbg_typename()
 {
@@ -129,7 +130,7 @@ rt_Data_t rt_fn_dbg_lineno()
 
 rt_Data_t rt_fn_dbg_timenow()
 {
-    return rt_Data_i64((int64_t) io_get_time_in_ms());
+    return rt_Data_i64((int64_t) util_gettime_ms());
 }
 
 rt_Data_t rt_fn_dbg_timenow_parameterized()

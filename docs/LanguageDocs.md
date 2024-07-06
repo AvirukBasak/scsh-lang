@@ -1,4 +1,4 @@
-**Last updated on June 18th, 2024**
+**Last updated on July 6th, 2024**
 
 The following is a documentation of the syntax and behaviour of the language.
 
@@ -51,7 +51,8 @@ Shsc is a dynamically and weakly typed language with coercion rules that make se
     - [Arguments to `main:main`](#arguments-to-mainmain)
     - [Procedure context](#procedure-context)
 - [Lambdas](#lambdas)
-    - [Example](#example-3)
+- [Syntax Conflicts](#syntax-conflicts)
+    - [R/R Conflict 1](#rr-conflict-1)
 - [Interop with C](#interop-with-c)
 - [Expressions](#expressions)
     - [Ternary expression](#ternary-expression)
@@ -62,7 +63,7 @@ Shsc is a dynamically and weakly typed language with coercion rules that make se
     - [Special types](#special-types)
     - [Hidden types](#hidden-types)
     - [Special global variables](#special-global-variables)
-    - [Global variables for types](#global-variables-for-types)
+    - [Global Variables for Types](#global-variables-for-types)
     - [Memory management](#memory-management)
     - [Memory allocation](#memory-allocation)
         - [Example](#example-4)
@@ -262,6 +263,11 @@ Note that not using `weak` in a circular reference will cause a memory leak beca
 - The `weak` keyword can be used only after the `=` operator.
 - It can be used in variable declaration as well as assignment.
 - It can be used in conjunction with `const` keyword.
+- Using `weak` on a literal will cause undefined behaviour. See [`examples/weakref_tmp.shsc`](../examples/weakref_tmp.shsc)
+    ```lua
+    # This will cause undefined behaviour
+    var x = weak { a: "some data", b: {} }
+    ```
 
 ### Semicolons
 Newlines or semicolons can be used to terminate a statement.
@@ -363,7 +369,22 @@ end
 
 ## Block statement
 Creates an unnamed scope.
-It's pretty much useless.
+
+**Example:**
+```lua
+block {
+    var x = 5
+    io:print(x, lf)
+}
+```
+
+**Alternative:**
+```lua
+block
+    var x = 5
+    io:print(x, lf)
+end
+```
 
 ## Procedures
 The following is an example of a factorial program that shows how to use procedures.
@@ -391,25 +412,23 @@ end
 
 ### Procedure arguments
 
-#### Example
-Four ways to access the first (0th) argument to a procedure.
+##### Deprecated
+
+**Example:**
 ```lua
 var x = $0
 var y = $[0]
 var z = $(0)
 var w = args[0]
 ```
-
+Four ways to access the first (0th) argument to a procedure.
 Arguments to a procedure is defined by the actual parameters (i.e. at the caller side).
-
-Procedures have no prototypes or formal parameters.
+Procedures have no prototypes.
 
 Arguments are stored in the `args` built-in `lst` type variable.
-
 However, you may access arguments using the syntax `$i` where `i` is and identifier or literal that evaluates to a valid `i64` index.
 
 You may also use `$(expr)` or `$[expr]` where `expr` is an expression that evaluates to a valid `i64` index.
-
 Of course, you may also use the `args` list to access the arguments, as in `args[expr]`.
 
 ### Named arguments
@@ -519,13 +538,41 @@ Lambdas also support context objects.
 
 ### Example
 ```lua
-var add = (a, b) -> a + b
-var long_proc = (a, b) -> {
+var add = (a, b) -> (a + b)
+var long_proc = proc (a, b) {
     var x = a + b
     return x
 }
 io:print(add(5, 6), lf)
 io:print(long_proc(5, 6), lf)
+```
+
+## Syntax Conflicts
+
+The following syntax conflicts exist in the language. Using the following syntax may result in undefined behaviour.
+This is because while the current parser may behave in a specific way, in later revisions the behaviour may change.
+
+### R/R Conflict 1
+
+In the current parser, the 1st example will be accepted, while the 2nd will raise an error.
+The `•` shows the position of the conflict.
+
+See [`docs/BisonConflicts.md`](BisonConflicts.txt) for `-Wcounterexamples` output.
+
+**Example 1:**
+```lua
+proc foo()
+    var y = 5
+    return (x • ) -> 5
+end
+```
+
+**Example 2:**
+```lua
+proc foo()
+    var x = 7
+    return (x • ) = 5
+end
 ```
 
 ## Interop with C
@@ -560,12 +607,15 @@ var u = (x = 4) if true else "hi"
 The language supports the following `built-in` literals.
 - `bul` Boolean
 - `chr` String character
-- `i64` 64-bit integer
+- `i64` 64-bit signed integer
 - `f64` 64-bit float
 - `str` ASCII string
 - `lst` Dynamic valued list
 - `map` String to any hash map
 - `null` Null data
+- `proc` Pointer to existing procedure
+- `lambda` Lambda (anonymous) function
+- `libhandle` Shared library handle data
 
 ### Coercion Rules
 - Any built-in can be coerced to a string.
@@ -587,8 +637,10 @@ The language supports the following `built-in` literals.
 These variables must not be assigned to or else the user may face issues.
 - `lf` chr value equal to `'\n'`
 - `null` null data
+- `globals` map of global variables
+- `Types` map of type names to type values
 
-### Global variables for types
+### Global Variables for Types
 These variables must not be assigned to or else the user may face issues.
 - `bul` i64 value indicating the bul type
 - `chr` i64 value indicating the chr type
@@ -597,7 +649,10 @@ These variables must not be assigned to or else the user may face issues.
 - `str` i64 value indicating the str type
 - `lst` i64 value indicating the lst type
 - `map` i64 value indicating the map type
+- `null` i64 value indicating the null type
 - `proc` i64 value indicating the proc type
+- `lambda` i64 value indicating the lambda type
+- `libhandle` i64 value indicating the libhandle type
 
 The term `built-in` is more accurate for these and we will not call these *primitive*s.
 The language has built-in support for complex composite data structures which can be used using the literals syntax.
@@ -628,6 +683,7 @@ Ownership in our case is being able to destroy the data (free memory).
 The following takes memory ownership
 - Any variable to whom data is assigned (until reassigned)
 - Accumulator; or else procedure returns won't work (temporarily)
+- Intermediate results are owned by 2 internal temporary variables
 
 #### Accumulator
 The language uses a temporary location called the `accumulator` to store the result of operations and return values.
@@ -715,26 +771,45 @@ Note how order of keys is not maintained.
 
 Also note how data is stringified during conversion to string (printing).
 
+### Map with `const` Keys
+A map can have `const` keys which prevent modification of the key.
+
+```lua
+proc main()
+    var p = {}
+    p.x = const 5
+    p.x = 11
+end
+```
+
+Note that keys can't be const marked using the map literal syntax. Instead it uses the [`lazy const`](#lazy-const) syntax.
+
+**Output:**
+```
+shsc: test.shsc:4: cannot modify const variable
+    at main:main (test.shsc:4)
+```
+
 ## Built-in procedures
 The language supports the following built-in procedures (within built-in modules)
 
-| -      | assert  | dbg      | io      | it    | chr     | i64 | f64 | str     | lst     | map    |
-|--------|---------|----------|---------|-------|---------|-----|-----|---------|---------|--------|
-| isnull | type    | typename | print   | len   | max     | max | max | equals  | equals  | -      |
-| tostr  | equals  | refcnt   | input   | clone | min     | min | min | compare | compare | -      |
-| type   | notnull | id       | fexists | -     | isdigit | -   | -   | tolower | -       | -      |
-| cast   | -       | callproc | fread   | -     | isalpha | -   | -   | toupper | -       | -      |
-| -      | -       | filename | fwrite  | -     | isalnum | -   | -   | append  | append  | set    |
-| -      | -       | lineno   | fappend | -     | islower | -   | -   | insert  | insert  | get    |
-| -      | -       | -        | libopen | -     | isupper | -   | -   | erase   | erase   | erase  |
-| -      | -       | -        | libsym  | -     | isspace | -   | -   | concat  | concat  | concat |
-| -      | -       | -        | -       | -     | -       | -   | -   | reverse | reverse | -      |
-| -      | -       | -        | -       | -     | -       | -   | -   | substr  | sublist | keys   |
-| -      | -       | -        | -       | -     | -       | -   | -   | find    | find    | find   |
-| -      | -       | -        | -       | -     | -       | -   | -   | split   | join    | -      |
-| -      | -       | -        | -       | -     | -       | -   | -   | toi64   | -       | -      |
-| -      | -       | -        | -       | -     | -       | -   | -   | tof64   | -       | -      |
-| -      | -       | -        | -       | -     | -       | -   | -   | sort    | sort    | -      |
+| -       | assert  | dbg           | io      | it    | chr     | i64 | f64 | str     | lst     | map      |
+|---------|---------|---------------|---------|-------|---------|-----|-----|---------|---------|----------|
+| isnull  | type    | typename      | print   | len   | max     | max | max | equals  | equals  | -        |
+| tostr   | equals  | refcnt        | println | clone | min     | min | min | compare | compare | -        |
+| type    | notnull | id            | input   | -     | isdigit | -   | -   | tolower | -       | -        |
+| cast    | -       | callproc      | fexists | -     | isalpha | -   | -   | toupper | -       | -        |
+| max     | -       | filename      | fread   | -     | isalnum | -   | -   | append  | append  | set      |
+| min     | -       | lineno        | fwrite  | -     | islower | -   | -   | insert  | insert  | get      |
+| -       | -       | timenow       | fappend | -     | isupper | -   | -   | erase   | erase   | erase    |
+| -       | -       | timenow_param | libopen | -     | isspace | -   | -   | concat  | concat  | concat   |
+| -       | -       | -             | libsym  | -     | -       | -   | -   | reverse | reverse | -        |
+| -       | -       | -             | -       | -     | -       | -   | -   | substr  | sublist | keys     |
+| -       | -       | -             | -       | -     | -       | -   | -   | find    | find    | find     |
+| -       | -       | -             | -       | -     | -       | -   | -   | split   | join    | -        |
+| -       | -       | -             | -       | -     | -       | -   | -   | toi64   | -       | -        |
+| -       | -       | -             | -       | -     | -       | -   | -   | tof64   | -       | -        |
+| -       | -       | -             | -       | -     | -       | -   | -   | sort    | sort    | -        |
 
 #### Globally available
 - `isnull(any)` returns true if data is `null`, else false
@@ -759,12 +834,15 @@ The language supports the following built-in procedures (within built-in modules
 - `dbg:callproc(any, str, str, lst)` calls a procedure from a module; the first argument is the context object, the second argument is the module name, the third argument is the procedure name, and the fourth argument is the list of arguments to the procedure
 - `dbg:filename()` returns filename of the source file where called
 - `dbg:lineno()` returns line number of the source file where called
+- `dbg:timenow()` returns current time in milliseconds since epoch
+- `dbg:timenow_param(i64?)` returns time as a map with keys for each unit; optional argument is time in milliseconds
 
 #### Module `io`
 File I/O functions will not create a file if it doesn't exist.
 
 - `io:print(any, ...)` prints string form of data (calls `tostr`)
-- `io:input(str, i64)` where the first argument is the prompt and the second argument is the type of input, see [global variables for types](#global-variables-for-types)
+- `io:println(any, ...)` prints string form of data (calls `tostr`) and appends a newline
+- `io:input(str, i64)` where the first argument is the prompt and the second argument is the type of input, see the [`Types`](#the-global-types-map) map
 - `io:fexists(str)` returns true if file exists, else false
 - `io:fread(str)` reads a file and returns a string; the first argument is the file path
 - `io:fwrite(str, str)` writes a string to a file; the first argument is the file path
