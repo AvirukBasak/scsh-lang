@@ -1,0 +1,5 @@
+proc main()
+    io:println(rand())
+    io:println(rand())
+    io:println(rand())
+end
