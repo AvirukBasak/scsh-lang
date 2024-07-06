@@ -1,7 +1,10 @@
-# the following will cause memory leak
+# the following will cause undefined behavior
+# as the list is deallocated immediately after the assignment
 proc foo()
-    var x = weak [1, 2, 3]
-    x[2] = 5
+    # uncommenting the following line and run with ASAN to
+    # see the error
+    # var x = weak [1, 2, 3]
+    # x[2] = 5
 end
 
 proc main()
