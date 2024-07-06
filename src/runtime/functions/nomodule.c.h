@@ -10,6 +10,7 @@
 #include "runtime/functions.h"
 #include "runtime/functions/nomodule.h"
 #include "runtime/VarTable.h"
+#include "util.h"
 
 rt_Data_t rt_fn_isnull()
 {
@@ -127,6 +128,12 @@ rt_Data_t rt_fn_min()
     rt_Data_t min = rt_Data_null();
     rt_fn_MIN_MAX_HANDLER(args, min, <);
     return min;
+}
+
+rt_Data_t rt_fn_rand()
+{
+    double num = (double) util_rand() / RAND_MAX;
+    return rt_Data_f64(num);
 }
 
 #else

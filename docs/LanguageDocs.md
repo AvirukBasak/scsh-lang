@@ -801,7 +801,7 @@ The language supports the following built-in procedures (within built-in modules
 | cast    | -       | callproc      | fexists | -     | isalpha | -   | -   | toupper | -       | -        |
 | max     | -       | filename      | fread   | -     | isalnum | -   | -   | append  | append  | set      |
 | min     | -       | lineno        | fwrite  | -     | islower | -   | -   | insert  | insert  | get      |
-| -       | -       | timenow       | fappend | -     | isupper | -   | -   | erase   | erase   | erase    |
+| rand    | -       | timenow       | fappend | -     | isupper | -   | -   | erase   | erase   | erase    |
 | -       | -       | timenow_param | libopen | -     | isspace | -   | -   | concat  | concat  | concat   |
 | -       | -       | -             | libsym  | -     | -       | -   | -   | reverse | reverse | -        |
 | -       | -       | -             | -       | -     | -       | -   | -   | substr  | sublist | keys     |
@@ -820,6 +820,7 @@ The language supports the following built-in procedures (within built-in modules
 - `max(lst)` returns the greatest of the items in the list; returns `null` if list is empty
 - `min(any, ...)` returns the smallest of the arguments; returns `null` if no arguments are passed
 - `min(lst)` returns the smallest of the items in the list; returns `null` if list is empty
+- `rand()` returns a random number between 0 and 1
 
 #### Module `assert`
 - `assert:type(any, i64)` returns true if data is of the specified type, else throws an error
