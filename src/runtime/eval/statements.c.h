@@ -32,6 +32,12 @@ rt_ControlStatus_t rt_eval_Statements(const ast_Statements_t *code)
         }
 
         rt_ControlStatus_t ctrl = rt_eval_Statement(ptr->statement);
+
+        /* during statement eval, calls to rt_VarTable_mkliteral sets composite literals
+         * in a global map to keep refs to their elements alive.
+         * The following clears the global map for reuse in the next statement for other literals */
+        rt_VarTable_destroy_litmap();
+
         if (!rt_Data_isnull(exit_code))
             rt_VarTable_acc_setval(exit_code);
         if (ctrl != rt_CTRL_PASS) return ctrl;
