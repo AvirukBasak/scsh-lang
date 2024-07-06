@@ -1,4 +1,4 @@
-**Last updated on June 25th, 2024**
+**Last updated on July 6th, 2024**
 
 The following is a documentation of the syntax and behaviour of the language.
 
@@ -278,9 +278,9 @@ Note that not using `weak` in a circular reference will cause a memory leak beca
 - The `weak` keyword can be used only after the `=` operator.
 - It can be used in variable declaration as well as assignment.
 - It can be used in conjunction with `const` keyword.
-- Using `weak` on a literal will cause memory leak.
+- Using `weak` on a literal will cause undefined behaviour. See [`examples/weakref_tmp.shsc`](../examples/weakref_tmp.shsc)
     ```lua
-    # This will cause memory leak
+    # This will cause undefined behaviour
     var x = weak { a: "some data", b: {} }
     ```
 

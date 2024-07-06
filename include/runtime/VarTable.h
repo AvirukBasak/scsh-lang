@@ -9,11 +9,13 @@
 #include "ast.h"
 #include "runtime/data/Data.h"
 
-#define _RT_VTABLE_TMPVAR_CNT     (32)
-#define RT_VTABLE_ARGSVAR         "args"
-#define RT_VTABLE_CONTEXTVAR      "this"
-#define RT_VTABLE_CALLSTACK_LIMIT (1000)
-#define RT_VTABLE_ACC             (rt_VarTable_acc_get()->adr ? rt_VarTable_acc_get()->adr : &rt_VarTable_acc_get()->val)
+#define _RT_VTABLE_TMPVAR_CNT               (32)
+#define RT_VTABLE_ARGSVAR                   "args"
+#define RT_VTABLE_CONTEXTVAR                "this"
+#define RT_VTABLE_CALLSTACK_LIMIT           (1000)
+#define RT_VTABLE_ACC                       (rt_VarTable_acc_get()->adr ? rt_VarTable_acc_get()->adr : &rt_VarTable_acc_get()->val)
+#define RT_VTABLE_LITERAL_RANDOMKEY_LEN     (12)
+#define RT_VTABLE_LITERAL_RANDOMKEY_PREFIX  ('#')
 
 
 typedef rt_DataMap_t *rt_VarTable_Scope_t;
@@ -59,6 +61,13 @@ rt_Data_t rt_VarTable_rsv_Types,
 
 /** create a new variable in the current scope */
 void rt_VarTable_create(const char *varname, rt_Data_t value, bool is_const, bool is_weak);
+
+/** register a literal in a seperate global map */
+void rt_VarTable_mkliteral(rt_Data_t value);
+
+/** clear the gloabl map from `rt_VarTable_mkliteral` for
+    reuse in the next statement */
+void rt_VarTable_destroy_litmap();
 
 /** modify data directly by address instead of querying via identifier */
 rt_Data_t *rt_VarTable_modf(rt_Data_t *dest, rt_Data_t src, bool is_const, bool is_weak);

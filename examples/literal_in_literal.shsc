@@ -1,0 +1,8 @@
+proc main()
+    var x = {}
+    x.d = io:print
+
+    var list = null
+    list = ["", ""]
+    var x = {}
+end
