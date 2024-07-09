@@ -1,4 +1,4 @@
-**Last updated on July 6th, 2024**
+**Last updated on July 9th, 2024**
 
 The following is a documentation of the syntax and behaviour of the language.
 
@@ -848,7 +848,7 @@ File I/O functions will not create a file if it doesn't exist.
 - `io:fread(str)` reads a file and returns a string; the first argument is the file path
 - `io:fwrite(str, str)` writes a string to a file; the first argument is the file path
 - `io:fappend(str, str)` appends a string to a file; the first argument is the file path
-- `io:libopen(str)` opens a shared library and returns a handle object
+- `io:libopen(str)` opens a shared library relative to working directory and returns a handle object
 - `io:libsym(libhandle, str)` returns a native lambda given handle and the name of the function
 
 #### Module `it`

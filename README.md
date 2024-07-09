@@ -113,6 +113,7 @@ shsc examples/fibonacci.txt
  - List file is specified using the `--run` flag
  - This loads multiple files for execution under a single runtime
  - Each line of the list file has a single shsc file path
+ - Paths are relative to working directory of `shsc` command
  - Spaces in file path is valid and quotes not required
  - If shsc fails to read one file, it'll skip to next file
  - If shsc fails to parse any file, it'll report error and exit
