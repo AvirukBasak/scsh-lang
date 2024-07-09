@@ -11,7 +11,7 @@
 #include "runtime/io.h"
 #include "runtime/VarTable.h"
 
-int rt_exec(int argc, char **argv)
+int rt_exec(int argc, const char **argv)
 {
     const ast_Identifier_t *module = ast_util_MODULEANDPROCTABLE_IDFMAIN;
     const ast_Identifier_t *proc = ast_util_MODULEANDPROCTABLE_IDFMAIN;
@@ -25,9 +25,11 @@ int rt_exec(int argc, char **argv)
        here we do skip the path to the interpreter so args[0]
        will be path to the script only */
     rt_Data_t args = rt_Data_list(rt_DataList_init());
-    for (int i = 1; i < argc; ++i) {
-        rt_Data_t arg = rt_Data_str(rt_DataStr_init(argv[i]));
-        rt_DataList_append(args.data.lst, arg);
+    if (argc > 0 && argv) {
+        for (int i = 0; i < argc; ++i) {
+            rt_Data_t arg = rt_Data_str(rt_DataStr_init(argv[i]));
+            rt_DataList_append(args.data.lst, arg);
+        }
     }
 
     rt_VarTable_push_proc(module, proc, currfile);

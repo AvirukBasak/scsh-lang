@@ -5,6 +5,6 @@
 #include "lexer.h"
 #include "runtime/data/Data.h"
 
-int rt_exec(int argc, char **argv);
+int rt_exec(int argc, const char **argv);
 
 #endif
