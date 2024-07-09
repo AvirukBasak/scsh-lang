@@ -1,6 +1,6 @@
 # Shsc
 
-[![Beta](https://img.shields.io/badge/Version-1.7%20Beta-red.svg)](https://github.com/AvirukBasak/shsc-lang/releases/tag/v1.6)
+[![Beta](https://img.shields.io/badge/Version-1.8%20Beta-red.svg)](https://github.com/AvirukBasak/shsc-lang/releases/tag/v1.8)
 
 A scripting language inspired by C, Python and Javascript.
 
@@ -42,28 +42,32 @@ See [`Shsc Syntax Highlighting`](https://github.com/AvirukBasak/shsc-syntax-high
 
 ### Usage
 ```
-USAGE:
-  shsc              [FILENAMES] execute files listed as args
-  shsc <flags>      [FILENAMES] provide with additional flags
-FLAGS:
-  -r    --run       [FILENAME]  run files listed in file
-  -t    --ast       [FILENAME]  save AST as JSON to file
-  -ldbg --lex-debug [FILENAME]  produce formatted JSON
-  -tf   --astf      [FILENAME]  produce formatted JSON
-  -h    --help                  view this message
-  -v    --version               version info
+Usage:
+  shsc [options] file... -args args...
+Options:
+  [-v    | --version]                   Show version
+  [-h    | --help   ]                   Show this help message
+  [-r    | --run    ]   listfile        Run scripts listed in the listfile
+  [-t    | --ast    ]   outfile file... Parse file and save AST as JSON in outfile
+  [-tf   | --astf   ]   outfile file... Parse file and save  formatted AST as JSON in outfile
+  [-ldbg | --lex-debug] file...         Scan file and print lexer debug output
+Notes:
+  > file... - one or more shsc code files
+  > args... - arguments passed to the main:main shsc method; are optional
+  > flag -args can be added after file... or after listfile in case of --run
+  > passing a dash (-) anywhere as filename will read from stdin or write to stdout
 ```
 
 Examples at [`examples/`](examples/).
 
-### Run Shsc script
+### Run Shsc Script
 ```
-make run ARGS="examples/helloworld.txt"
+make run ARGS="examples/fibonacci.txt"
 ```
 
 or, if properly loaded in `PATH` environment variable
 ```
-shsc examples/helloworld.txt
+shsc examples/fibonacci.txt
 ```
 
 **NOTE**: File extension means nothing to the interpreter as long as the code inside is valid. However, the syntax highlighting plugin will work only for `.shsc` files.
@@ -124,12 +128,13 @@ file4.some_extension
 file that has no extension
 ```
 
-### Example use
+### Other Example Use
+Run the tests using the list file
 ```
 # tested using tests/build.txt list file
 shsc -r tests/build.txt
 ```
-
+Output the AST to a file
 ```
 # tested on examples/factorial.txt
 shsc -tf ast.json examples/factorial.txt
