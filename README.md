@@ -131,8 +131,8 @@ file that has no extension
 ### Other Example Use
 Run the tests using the list file
 ```
-# tested using tests/build.txt list file
-shsc -r tests/build.txt
+# tested using examples/inheritance/listfile list file
+shsc -r examples/inheritance/listfile
 ```
 Output the AST to a file
 ```
