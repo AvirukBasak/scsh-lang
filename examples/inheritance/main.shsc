@@ -1,4 +1,5 @@
 proc main()
     var obj = inher:Derived::init(1, 2, 3)
     io:print(obj.toStr(), lf)
+    io:println(args)
 end
