@@ -1,31 +1,59 @@
 {
   "node": "root",
-  "main": {
+  "inher:Derived": {
     "node": "module",
-    "main": {
+    "init": {
       "node": "procedure",
-      "file": "examples/helloworld.shsc",
-      "fnargs_list": null,
+      "file": "examples/inheritance/derived.shsc",
+      "fnargs_list": {
+        "node": "fnargs_list",
+        "fnargs_list": [
+          {
+            "node": "identifier",
+            "identifier_name": "x"
+          },
+          {
+            "node": "identifier",
+            "identifier_name": "y"
+          },
+          {
+            "node": "identifier",
+            "identifier_name": "z"
+          }
+        ]
+      },
       "statements": {
         "node": "statements",
         "statements": [
           {
             "node": "statement",
-            "line_no": 15,
+            "line_no": 5,
             "type": "STATEMENT_TYPE_ASSIGNMENT",
             "statement": {
               "node": "assignment",
               "lhs": {
                 "node": "identifier",
-                "identifier_name": "ret"
+                "identifier_name": "baseObj"
               },
               "rhs": {
                 "node": "expression",
                 "op": "()",
-                "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                "lhs_type": "EXPR_TYPE_EXPRESSION",
                 "lhs": {
-                  "node": "identifier",
-                  "identifier_name": "test"
+                  "node": "expression",
+                  "op": "::",
+                  "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                  "lhs": {
+                    "node": "identifier",
+                    "identifier_name": "inher:Base"
+                  },
+                  "rhs_type": "EXPR_TYPE_IDENTIFIER",
+                  "rhs": {
+                    "node": "identifier",
+                    "identifier_name": "init"
+                  },
+                  "condition_type": "EXPR_TYPE_NULL",
+                  "condition": null
                 },
                 "rhs_type": "EXPR_TYPE_LITERAL",
                 "rhs": {
@@ -37,11 +65,10 @@
                       {
                         "node": "expression",
                         "op": "NOP",
-                        "lhs_type": "EXPR_TYPE_LITERAL",
+                        "lhs_type": "EXPR_TYPE_IDENTIFIER",
                         "lhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_STR",
-                          "data": "Times"
+                          "node": "identifier",
+                          "identifier_name": "x"
                         },
                         "rhs_type": "EXPR_TYPE_NULL",
                         "rhs": null,
@@ -51,85 +78,10 @@
                       {
                         "node": "expression",
                         "op": "NOP",
-                        "lhs_type": "EXPR_TYPE_LITERAL",
+                        "lhs_type": "EXPR_TYPE_IDENTIFIER",
                         "lhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_LST",
-                          "data": {
-                            "node": "comma_list",
-                            "comma_list": [
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_I64",
-                                  "data": 1
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              },
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_I64",
-                                  "data": 2
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              },
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_I64",
-                                  "data": 3
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              },
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_I64",
-                                  "data": 4
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              },
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_I64",
-                                  "data": 5
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              }
-                            ]
-                          }
+                          "node": "identifier",
+                          "identifier_name": "y"
                         },
                         "rhs_type": "EXPR_TYPE_NULL",
                         "rhs": null,
@@ -146,7 +98,138 @@
           },
           {
             "node": "statement",
-            "line_no": 16,
+            "line_no": 10,
+            "type": "STATEMENT_TYPE_ASSIGNMENT",
+            "statement": {
+              "node": "assignment",
+              "lhs": {
+                "node": "identifier",
+                "identifier_name": "obj"
+              },
+              "rhs": {
+                "node": "expression",
+                "op": "NOP",
+                "lhs_type": "EXPR_TYPE_LITERAL",
+                "lhs": {
+                  "node": "literal",
+                  "type": "DATA_TYPE_MAP",
+                  "data": {
+                    "node": "assoc_list",
+                    "assoc_list": [
+                      {
+                        "key": {
+                          "node": "literal",
+                          "type": "DATA_TYPE_STR",
+                          "data": "z"
+                        },
+                        "value": {
+                          "node": "expression",
+                          "op": "NOP",
+                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                          "lhs": {
+                            "node": "identifier",
+                            "identifier_name": "z"
+                          },
+                          "rhs_type": "EXPR_TYPE_NULL",
+                          "rhs": null,
+                          "condition_type": "EXPR_TYPE_NULL",
+                          "condition": null
+                        }
+                      },
+                      {
+                        "key": {
+                          "node": "literal",
+                          "type": "DATA_TYPE_STR",
+                          "data": "_base_toStr"
+                        },
+                        "value": {
+                          "node": "expression",
+                          "op": ".",
+                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                          "lhs": {
+                            "node": "identifier",
+                            "identifier_name": "baseObj"
+                          },
+                          "rhs_type": "EXPR_TYPE_LITERAL",
+                          "rhs": {
+                            "node": "literal",
+                            "type": "DATA_TYPE_STR",
+                            "data": "toStr"
+                          },
+                          "condition_type": "EXPR_TYPE_NULL",
+                          "condition": null
+                        }
+                      },
+                      {
+                        "key": {
+                          "node": "literal",
+                          "type": "DATA_TYPE_STR",
+                          "data": "toStr"
+                        },
+                        "value": {
+                          "node": "expression",
+                          "op": "NOP",
+                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                          "lhs": {
+                            "node": "identifier",
+                            "identifier_name": "null"
+                          },
+                          "rhs_type": "EXPR_TYPE_NULL",
+                          "rhs": null,
+                          "condition_type": "EXPR_TYPE_NULL",
+                          "condition": null
+                        }
+                      }
+                    ]
+                  }
+                },
+                "rhs_type": "EXPR_TYPE_NULL",
+                "rhs": null,
+                "condition_type": "EXPR_TYPE_NULL",
+                "condition": null
+              }
+            }
+          },
+          {
+            "node": "statement",
+            "line_no": 12,
+            "type": "STATEMENT_TYPE_ASSIGNMENT",
+            "statement": {
+              "node": "assignment",
+              "lhs": null,
+              "rhs": {
+                "node": "expression",
+                "op": "=",
+                "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                "lhs": {
+                  "node": "identifier",
+                  "identifier_name": "obj"
+                },
+                "rhs_type": "EXPR_TYPE_EXPRESSION",
+                "rhs": {
+                  "node": "expression",
+                  "op": "+",
+                  "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                  "lhs": {
+                    "node": "identifier",
+                    "identifier_name": "baseObj"
+                  },
+                  "rhs_type": "EXPR_TYPE_IDENTIFIER",
+                  "rhs": {
+                    "node": "identifier",
+                    "identifier_name": "obj"
+                  },
+                  "condition_type": "EXPR_TYPE_NULL",
+                  "condition": null
+                },
+                "condition_type": "EXPR_TYPE_NULL",
+                "condition": null
+              }
+            }
+          },
+          {
+            "node": "statement",
+            "line_no": 13,
             "type": "STATEMENT_TYPE_ASSIGNMENT",
             "statement": {
               "node": "assignment",
@@ -181,24 +264,10 @@
                       {
                         "node": "expression",
                         "op": "NOP",
-                        "lhs_type": "EXPR_TYPE_LITERAL",
-                        "lhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_STR",
-                          "data": "Return val:"
-                        },
-                        "rhs_type": "EXPR_TYPE_NULL",
-                        "rhs": null,
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null
-                      },
-                      {
-                        "node": "expression",
-                        "op": "NOP",
                         "lhs_type": "EXPR_TYPE_IDENTIFIER",
                         "lhs": {
                           "node": "identifier",
-                          "identifier_name": "ret"
+                          "identifier_name": "obj"
                         },
                         "rhs_type": "EXPR_TYPE_NULL",
                         "rhs": null,
@@ -225,17 +294,340 @@
                 "condition": null
               }
             }
+          },
+          {
+            "node": "statement",
+            "line_no": 14,
+            "type": "STATEMENT_TYPE_ASSIGNMENT",
+            "statement": {
+              "node": "assignment",
+              "lhs": null,
+              "rhs": {
+                "node": "expression",
+                "op": "= const",
+                "lhs_type": "EXPR_TYPE_EXPRESSION",
+                "lhs": {
+                  "node": "expression",
+                  "op": ".",
+                  "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                  "lhs": {
+                    "node": "identifier",
+                    "identifier_name": "obj"
+                  },
+                  "rhs_type": "EXPR_TYPE_LITERAL",
+                  "rhs": {
+                    "node": "literal",
+                    "type": "DATA_TYPE_STR",
+                    "data": "toStr"
+                  },
+                  "condition_type": "EXPR_TYPE_NULL",
+                  "condition": null
+                },
+                "rhs_type": "EXPR_TYPE_IDENTIFIER",
+                "rhs": {
+                  "node": "identifier",
+                  "identifier_name": "toStr"
+                },
+                "condition_type": "EXPR_TYPE_NULL",
+                "condition": null
+              }
+            }
+          },
+          {
+            "node": "statement",
+            "line_no": 15,
+            "type": "STATEMENT_TYPE_RETURN",
+            "statement": {
+              "node": "expression",
+              "op": "NOP",
+              "lhs_type": "EXPR_TYPE_IDENTIFIER",
+              "lhs": {
+                "node": "identifier",
+                "identifier_name": "obj"
+              },
+              "rhs_type": "EXPR_TYPE_NULL",
+              "rhs": null,
+              "condition_type": "EXPR_TYPE_NULL",
+              "condition": null
+            }
           }
         ]
       }
     },
-    "xyz": {
+    "toStr": {
       "node": "procedure",
-      "file": "tests/test.txt",
+      "file": "examples/inheritance/derived.shsc",
       "fnargs_list": null,
       "statements": {
         "node": "statements",
         "statements": [
+          {
+            "node": "statement",
+            "line_no": 19,
+            "type": "STATEMENT_TYPE_ASSIGNMENT",
+            "statement": {
+              "node": "assignment",
+              "lhs": {
+                "node": "identifier",
+                "identifier_name": "baseStr"
+              },
+              "rhs": {
+                "node": "expression",
+                "op": "()",
+                "lhs_type": "EXPR_TYPE_EXPRESSION",
+                "lhs": {
+                  "node": "expression",
+                  "op": ".",
+                  "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                  "lhs": {
+                    "node": "identifier",
+                    "identifier_name": "this"
+                  },
+                  "rhs_type": "EXPR_TYPE_LITERAL",
+                  "rhs": {
+                    "node": "literal",
+                    "type": "DATA_TYPE_STR",
+                    "data": "_base_toStr"
+                  },
+                  "condition_type": "EXPR_TYPE_NULL",
+                  "condition": null
+                },
+                "rhs_type": "EXPR_TYPE_NULL",
+                "rhs": null,
+                "condition_type": "EXPR_TYPE_NULL",
+                "condition": null
+              }
+            }
+          },
+          {
+            "node": "statement",
+            "line_no": 20,
+            "type": "STATEMENT_TYPE_ASSIGNMENT",
+            "statement": {
+              "node": "assignment",
+              "lhs": {
+                "node": "identifier",
+                "identifier_name": "z"
+              },
+              "rhs": {
+                "node": "expression",
+                "op": ".",
+                "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                "lhs": {
+                  "node": "identifier",
+                  "identifier_name": "this"
+                },
+                "rhs_type": "EXPR_TYPE_LITERAL",
+                "rhs": {
+                  "node": "literal",
+                  "type": "DATA_TYPE_STR",
+                  "data": "z"
+                },
+                "condition_type": "EXPR_TYPE_NULL",
+                "condition": null
+              }
+            }
+          },
+          {
+            "node": "statement",
+            "line_no": 21,
+            "type": "STATEMENT_TYPE_RETURN",
+            "statement": {
+              "node": "expression",
+              "op": "NOP",
+              "lhs_type": "EXPR_TYPE_LITERAL",
+              "lhs": {
+                "node": "literal",
+                "type": "DATA_TYPE_STR",
+                "data": "{baseStr}, {z}"
+              },
+              "rhs_type": "EXPR_TYPE_NULL",
+              "rhs": null,
+              "condition_type": "EXPR_TYPE_NULL",
+              "condition": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  "main": {
+    "node": "module",
+    "main": {
+      "node": "procedure",
+      "file": "examples/inheritance/main.shsc",
+      "fnargs_list": null,
+      "statements": {
+        "node": "statements",
+        "statements": [
+          {
+            "node": "statement",
+            "line_no": 2,
+            "type": "STATEMENT_TYPE_ASSIGNMENT",
+            "statement": {
+              "node": "assignment",
+              "lhs": {
+                "node": "identifier",
+                "identifier_name": "obj"
+              },
+              "rhs": {
+                "node": "expression",
+                "op": "()",
+                "lhs_type": "EXPR_TYPE_EXPRESSION",
+                "lhs": {
+                  "node": "expression",
+                  "op": "::",
+                  "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                  "lhs": {
+                    "node": "identifier",
+                    "identifier_name": "inher:Derived"
+                  },
+                  "rhs_type": "EXPR_TYPE_IDENTIFIER",
+                  "rhs": {
+                    "node": "identifier",
+                    "identifier_name": "init"
+                  },
+                  "condition_type": "EXPR_TYPE_NULL",
+                  "condition": null
+                },
+                "rhs_type": "EXPR_TYPE_LITERAL",
+                "rhs": {
+                  "node": "literal",
+                  "type": "DATA_TYPE_LST",
+                  "data": {
+                    "node": "comma_list",
+                    "comma_list": [
+                      {
+                        "node": "expression",
+                        "op": "NOP",
+                        "lhs_type": "EXPR_TYPE_LITERAL",
+                        "lhs": {
+                          "node": "literal",
+                          "type": "DATA_TYPE_I64",
+                          "data": 1
+                        },
+                        "rhs_type": "EXPR_TYPE_NULL",
+                        "rhs": null,
+                        "condition_type": "EXPR_TYPE_NULL",
+                        "condition": null
+                      },
+                      {
+                        "node": "expression",
+                        "op": "NOP",
+                        "lhs_type": "EXPR_TYPE_LITERAL",
+                        "lhs": {
+                          "node": "literal",
+                          "type": "DATA_TYPE_I64",
+                          "data": 2
+                        },
+                        "rhs_type": "EXPR_TYPE_NULL",
+                        "rhs": null,
+                        "condition_type": "EXPR_TYPE_NULL",
+                        "condition": null
+                      },
+                      {
+                        "node": "expression",
+                        "op": "NOP",
+                        "lhs_type": "EXPR_TYPE_LITERAL",
+                        "lhs": {
+                          "node": "literal",
+                          "type": "DATA_TYPE_I64",
+                          "data": 3
+                        },
+                        "rhs_type": "EXPR_TYPE_NULL",
+                        "rhs": null,
+                        "condition_type": "EXPR_TYPE_NULL",
+                        "condition": null
+                      }
+                    ]
+                  }
+                },
+                "condition_type": "EXPR_TYPE_NULL",
+                "condition": null
+              }
+            }
+          },
+          {
+            "node": "statement",
+            "line_no": 3,
+            "type": "STATEMENT_TYPE_ASSIGNMENT",
+            "statement": {
+              "node": "assignment",
+              "lhs": null,
+              "rhs": {
+                "node": "expression",
+                "op": "()",
+                "lhs_type": "EXPR_TYPE_EXPRESSION",
+                "lhs": {
+                  "node": "expression",
+                  "op": "::",
+                  "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                  "lhs": {
+                    "node": "identifier",
+                    "identifier_name": "io"
+                  },
+                  "rhs_type": "EXPR_TYPE_IDENTIFIER",
+                  "rhs": {
+                    "node": "identifier",
+                    "identifier_name": "print"
+                  },
+                  "condition_type": "EXPR_TYPE_NULL",
+                  "condition": null
+                },
+                "rhs_type": "EXPR_TYPE_LITERAL",
+                "rhs": {
+                  "node": "literal",
+                  "type": "DATA_TYPE_LST",
+                  "data": {
+                    "node": "comma_list",
+                    "comma_list": [
+                      {
+                        "node": "expression",
+                        "op": "()",
+                        "lhs_type": "EXPR_TYPE_EXPRESSION",
+                        "lhs": {
+                          "node": "expression",
+                          "op": ".",
+                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                          "lhs": {
+                            "node": "identifier",
+                            "identifier_name": "obj"
+                          },
+                          "rhs_type": "EXPR_TYPE_LITERAL",
+                          "rhs": {
+                            "node": "literal",
+                            "type": "DATA_TYPE_STR",
+                            "data": "toStr"
+                          },
+                          "condition_type": "EXPR_TYPE_NULL",
+                          "condition": null
+                        },
+                        "rhs_type": "EXPR_TYPE_NULL",
+                        "rhs": null,
+                        "condition_type": "EXPR_TYPE_NULL",
+                        "condition": null
+                      },
+                      {
+                        "node": "expression",
+                        "op": "NOP",
+                        "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                        "lhs": {
+                          "node": "identifier",
+                          "identifier_name": "lf"
+                        },
+                        "rhs_type": "EXPR_TYPE_NULL",
+                        "rhs": null,
+                        "condition_type": "EXPR_TYPE_NULL",
+                        "condition": null
+                      }
+                    ]
+                  }
+                },
+                "condition_type": "EXPR_TYPE_NULL",
+                "condition": null
+              }
+            }
+          },
           {
             "node": "statement",
             "line_no": 4,
@@ -258,7 +650,7 @@
                   "rhs_type": "EXPR_TYPE_IDENTIFIER",
                   "rhs": {
                     "node": "identifier",
-                    "identifier_name": "print"
+                    "identifier_name": "println"
                   },
                   "condition_type": "EXPR_TYPE_NULL",
                   "condition": null
@@ -273,24 +665,10 @@
                       {
                         "node": "expression",
                         "op": "NOP",
-                        "lhs_type": "EXPR_TYPE_LITERAL",
-                        "lhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_STR",
-                          "data": "Hello world!"
-                        },
-                        "rhs_type": "EXPR_TYPE_NULL",
-                        "rhs": null,
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null
-                      },
-                      {
-                        "node": "expression",
-                        "op": "NOP",
                         "lhs_type": "EXPR_TYPE_IDENTIFIER",
                         "lhs": {
                           "node": "identifier",
-                          "identifier_name": "lf"
+                          "identifier_name": "args"
                         },
                         "rhs_type": "EXPR_TYPE_NULL",
                         "rhs": null,
@@ -304,17 +682,39 @@
                 "condition": null
               }
             }
+          }
+        ]
+      }
+    }
+  },
+  "inher:Base": {
+    "node": "module",
+    "init": {
+      "node": "procedure",
+      "file": "examples/inheritance/base.shsc",
+      "fnargs_list": {
+        "node": "fnargs_list",
+        "fnargs_list": [
+          {
+            "node": "identifier",
+            "identifier_name": "x"
           },
           {
+            "node": "identifier",
+            "identifier_name": "y"
+          }
+        ]
+      },
+      "statements": {
+        "node": "statements",
+        "statements": [
+          {
             "node": "statement",
-            "line_no": 6,
+            "line_no": 4,
             "type": "STATEMENT_TYPE_ASSIGNMENT",
             "statement": {
               "node": "assignment",
-              "lhs": {
-                "node": "identifier",
-                "identifier_name": "x"
-              },
+              "lhs": null,
               "rhs": {
                 "node": "expression",
                 "op": "()",
@@ -325,12 +725,12 @@
                   "lhs_type": "EXPR_TYPE_IDENTIFIER",
                   "lhs": {
                     "node": "identifier",
-                    "identifier_name": "io"
+                    "identifier_name": "assert"
                   },
                   "rhs_type": "EXPR_TYPE_IDENTIFIER",
                   "rhs": {
                     "node": "identifier",
-                    "identifier_name": "input"
+                    "identifier_name": "type"
                   },
                   "condition_type": "EXPR_TYPE_NULL",
                   "condition": null
@@ -345,11 +745,10 @@
                       {
                         "node": "expression",
                         "op": "NOP",
-                        "lhs_type": "EXPR_TYPE_LITERAL",
+                        "lhs_type": "EXPR_TYPE_IDENTIFIER",
                         "lhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_STR",
-                          "data": ""
+                          "node": "identifier",
+                          "identifier_name": "x"
                         },
                         "rhs_type": "EXPR_TYPE_NULL",
                         "rhs": null,
@@ -383,488 +782,7 @@
           },
           {
             "node": "statement",
-            "line_no": 14,
-            "type": "STATEMENT_TYPE_COMPOUND",
-            "statement": {
-              "node": "if_block",
-              "condition": {
-                "node": "expression",
-                "op": "==",
-                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                "lhs": {
-                  "node": "identifier",
-                  "identifier_name": "x"
-                },
-                "rhs_type": "EXPR_TYPE_LITERAL",
-                "rhs": {
-                  "node": "literal",
-                  "type": "DATA_TYPE_I64",
-                  "data": 1
-                },
-                "condition_type": "EXPR_TYPE_NULL",
-                "condition": null
-              },
-              "if_st": {
-                "node": "statements",
-                "statements": [
-                  {
-                    "node": "statement",
-                    "line_no": 9,
-                    "type": "STATEMENT_TYPE_ASSIGNMENT",
-                    "statement": {
-                      "node": "assignment",
-                      "lhs": null,
-                      "rhs": {
-                        "node": "expression",
-                        "op": "()",
-                        "lhs_type": "EXPR_TYPE_EXPRESSION",
-                        "lhs": {
-                          "node": "expression",
-                          "op": "::",
-                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "lhs": {
-                            "node": "identifier",
-                            "identifier_name": "io"
-                          },
-                          "rhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "rhs": {
-                            "node": "identifier",
-                            "identifier_name": "print"
-                          },
-                          "condition_type": "EXPR_TYPE_NULL",
-                          "condition": null
-                        },
-                        "rhs_type": "EXPR_TYPE_LITERAL",
-                        "rhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_LST",
-                          "data": {
-                            "node": "comma_list",
-                            "comma_list": [
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_STR",
-                                  "data": "entered 1"
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              },
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                                "lhs": {
-                                  "node": "identifier",
-                                  "identifier_name": "lf"
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              }
-                            ]
-                          }
-                        },
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null
-                      }
-                    }
-                  }
-                ]
-              },
-              "else_block": {
-                "node": "else_block",
-                "condition": {
-                  "node": "expression",
-                  "op": "==",
-                  "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                  "lhs": {
-                    "node": "identifier",
-                    "identifier_name": "x"
-                  },
-                  "rhs_type": "EXPR_TYPE_LITERAL",
-                  "rhs": {
-                    "node": "literal",
-                    "type": "DATA_TYPE_I64",
-                    "data": 2
-                  },
-                  "condition_type": "EXPR_TYPE_NULL",
-                  "condition": null
-                },
-                "else_if_st": {
-                  "node": "statements",
-                  "statements": [
-                    {
-                      "node": "statement",
-                      "line_no": 11,
-                      "type": "STATEMENT_TYPE_ASSIGNMENT",
-                      "statement": {
-                        "node": "assignment",
-                        "lhs": null,
-                        "rhs": {
-                          "node": "expression",
-                          "op": "()",
-                          "lhs_type": "EXPR_TYPE_EXPRESSION",
-                          "lhs": {
-                            "node": "expression",
-                            "op": "::",
-                            "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                            "lhs": {
-                              "node": "identifier",
-                              "identifier_name": "io"
-                            },
-                            "rhs_type": "EXPR_TYPE_IDENTIFIER",
-                            "rhs": {
-                              "node": "identifier",
-                              "identifier_name": "print"
-                            },
-                            "condition_type": "EXPR_TYPE_NULL",
-                            "condition": null
-                          },
-                          "rhs_type": "EXPR_TYPE_LITERAL",
-                          "rhs": {
-                            "node": "literal",
-                            "type": "DATA_TYPE_LST",
-                            "data": {
-                              "node": "comma_list",
-                              "comma_list": [
-                                {
-                                  "node": "expression",
-                                  "op": "NOP",
-                                  "lhs_type": "EXPR_TYPE_LITERAL",
-                                  "lhs": {
-                                    "node": "literal",
-                                    "type": "DATA_TYPE_STR",
-                                    "data": "entered 2"
-                                  },
-                                  "rhs_type": "EXPR_TYPE_NULL",
-                                  "rhs": null,
-                                  "condition_type": "EXPR_TYPE_NULL",
-                                  "condition": null
-                                },
-                                {
-                                  "node": "expression",
-                                  "op": "NOP",
-                                  "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                                  "lhs": {
-                                    "node": "identifier",
-                                    "identifier_name": "lf"
-                                  },
-                                  "rhs_type": "EXPR_TYPE_NULL",
-                                  "rhs": null,
-                                  "condition_type": "EXPR_TYPE_NULL",
-                                  "condition": null
-                                }
-                              ]
-                            }
-                          },
-                          "condition_type": "EXPR_TYPE_NULL",
-                          "condition": null
-                        }
-                      }
-                    }
-                  ]
-                },
-                "else_block": {
-                  "node": "else_block",
-                  "condition": null,
-                  "else_if_st": {
-                    "node": "statements",
-                    "statements": [
-                      {
-                        "node": "statement",
-                        "line_no": 13,
-                        "type": "STATEMENT_TYPE_ASSIGNMENT",
-                        "statement": {
-                          "node": "assignment",
-                          "lhs": null,
-                          "rhs": {
-                            "node": "expression",
-                            "op": "()",
-                            "lhs_type": "EXPR_TYPE_EXPRESSION",
-                            "lhs": {
-                              "node": "expression",
-                              "op": "::",
-                              "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                              "lhs": {
-                                "node": "identifier",
-                                "identifier_name": "io"
-                              },
-                              "rhs_type": "EXPR_TYPE_IDENTIFIER",
-                              "rhs": {
-                                "node": "identifier",
-                                "identifier_name": "print"
-                              },
-                              "condition_type": "EXPR_TYPE_NULL",
-                              "condition": null
-                            },
-                            "rhs_type": "EXPR_TYPE_LITERAL",
-                            "rhs": {
-                              "node": "literal",
-                              "type": "DATA_TYPE_LST",
-                              "data": {
-                                "node": "comma_list",
-                                "comma_list": [
-                                  {
-                                    "node": "expression",
-                                    "op": "NOP",
-                                    "lhs_type": "EXPR_TYPE_LITERAL",
-                                    "lhs": {
-                                      "node": "literal",
-                                      "type": "DATA_TYPE_STR",
-                                      "data": "entered {x}"
-                                    },
-                                    "rhs_type": "EXPR_TYPE_NULL",
-                                    "rhs": null,
-                                    "condition_type": "EXPR_TYPE_NULL",
-                                    "condition": null
-                                  },
-                                  {
-                                    "node": "expression",
-                                    "op": "NOP",
-                                    "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                                    "lhs": {
-                                      "node": "identifier",
-                                      "identifier_name": "lf"
-                                    },
-                                    "rhs_type": "EXPR_TYPE_NULL",
-                                    "rhs": null,
-                                    "condition_type": "EXPR_TYPE_NULL",
-                                    "condition": null
-                                  }
-                                ]
-                              }
-                            },
-                            "condition_type": "EXPR_TYPE_NULL",
-                            "condition": null
-                          }
-                        }
-                      }
-                    ]
-                  },
-                  "else_block": null
-                }
-              }
-            }
-          },
-          {
-            "node": "statement",
-            "line_no": 19,
-            "type": "STATEMENT_TYPE_COMPOUND",
-            "statement": {
-              "node": "while_block",
-              "condition": {
-                "node": "expression",
-                "op": ">=",
-                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                "lhs": {
-                  "node": "identifier",
-                  "identifier_name": "x"
-                },
-                "rhs_type": "EXPR_TYPE_LITERAL",
-                "rhs": {
-                  "node": "literal",
-                  "type": "DATA_TYPE_I64",
-                  "data": 0
-                },
-                "condition_type": "EXPR_TYPE_NULL",
-                "condition": null
-              },
-              "statements": {
-                "node": "statements",
-                "statements": [
-                  {
-                    "node": "statement",
-                    "line_no": 17,
-                    "type": "STATEMENT_TYPE_ASSIGNMENT",
-                    "statement": {
-                      "node": "assignment",
-                      "lhs": null,
-                      "rhs": {
-                        "node": "expression",
-                        "op": "()",
-                        "lhs_type": "EXPR_TYPE_EXPRESSION",
-                        "lhs": {
-                          "node": "expression",
-                          "op": "::",
-                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "lhs": {
-                            "node": "identifier",
-                            "identifier_name": "io"
-                          },
-                          "rhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "rhs": {
-                            "node": "identifier",
-                            "identifier_name": "print"
-                          },
-                          "condition_type": "EXPR_TYPE_NULL",
-                          "condition": null
-                        },
-                        "rhs_type": "EXPR_TYPE_LITERAL",
-                        "rhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_LST",
-                          "data": {
-                            "node": "comma_list",
-                            "comma_list": [
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_STR",
-                                  "data": "x = {x}"
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              }
-                            ]
-                          }
-                        },
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null
-                      }
-                    }
-                  },
-                  {
-                    "node": "statement",
-                    "line_no": 18,
-                    "type": "STATEMENT_TYPE_ASSIGNMENT",
-                    "statement": {
-                      "node": "assignment",
-                      "lhs": null,
-                      "rhs": {
-                        "node": "expression",
-                        "op": "=",
-                        "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                        "lhs": {
-                          "node": "identifier",
-                          "identifier_name": "x"
-                        },
-                        "rhs_type": "EXPR_TYPE_EXPRESSION",
-                        "rhs": {
-                          "node": "expression",
-                          "op": "-",
-                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "lhs": {
-                            "node": "identifier",
-                            "identifier_name": "x"
-                          },
-                          "rhs_type": "EXPR_TYPE_LITERAL",
-                          "rhs": {
-                            "node": "literal",
-                            "type": "DATA_TYPE_I64",
-                            "data": 1
-                          },
-                          "condition_type": "EXPR_TYPE_NULL",
-                          "condition": null
-                        },
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "node": "statement",
-            "line_no": 21,
-            "type": "STATEMENT_TYPE_ASSIGNMENT",
-            "statement": {
-              "node": "assignment",
-              "lhs": null,
-              "rhs": {
-                "node": "expression",
-                "op": "=",
-                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                "lhs": {
-                  "node": "identifier",
-                  "identifier_name": "x"
-                },
-                "rhs_type": "EXPR_TYPE_EXPRESSION",
-                "rhs": {
-                  "node": "expression",
-                  "op": "()",
-                  "lhs_type": "EXPR_TYPE_EXPRESSION",
-                  "lhs": {
-                    "node": "expression",
-                    "op": "::",
-                    "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                    "lhs": {
-                      "node": "identifier",
-                      "identifier_name": "io"
-                    },
-                    "rhs_type": "EXPR_TYPE_IDENTIFIER",
-                    "rhs": {
-                      "node": "identifier",
-                      "identifier_name": "input"
-                    },
-                    "condition_type": "EXPR_TYPE_NULL",
-                    "condition": null
-                  },
-                  "rhs_type": "EXPR_TYPE_LITERAL",
-                  "rhs": {
-                    "node": "literal",
-                    "type": "DATA_TYPE_LST",
-                    "data": {
-                      "node": "comma_list",
-                      "comma_list": [
-                        {
-                          "node": "expression",
-                          "op": "NOP",
-                          "lhs_type": "EXPR_TYPE_LITERAL",
-                          "lhs": {
-                            "node": "literal",
-                            "type": "DATA_TYPE_STR",
-                            "data": "prompt: "
-                          },
-                          "rhs_type": "EXPR_TYPE_NULL",
-                          "rhs": null,
-                          "condition_type": "EXPR_TYPE_NULL",
-                          "condition": null
-                        },
-                        {
-                          "node": "expression",
-                          "op": ".",
-                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "lhs": {
-                            "node": "identifier",
-                            "identifier_name": "Types"
-                          },
-                          "rhs_type": "EXPR_TYPE_LITERAL",
-                          "rhs": {
-                            "node": "literal",
-                            "type": "DATA_TYPE_STR",
-                            "data": "STR"
-                          },
-                          "condition_type": "EXPR_TYPE_NULL",
-                          "condition": null
-                        }
-                      ]
-                    }
-                  },
-                  "condition_type": "EXPR_TYPE_NULL",
-                  "condition": null
-                },
-                "condition_type": "EXPR_TYPE_NULL",
-                "condition": null
-              }
-            }
-          },
-          {
-            "node": "statement",
-            "line_no": 22,
+            "line_no": 5,
             "type": "STATEMENT_TYPE_ASSIGNMENT",
             "statement": {
               "node": "assignment",
@@ -879,12 +797,12 @@
                   "lhs_type": "EXPR_TYPE_IDENTIFIER",
                   "lhs": {
                     "node": "identifier",
-                    "identifier_name": "io"
+                    "identifier_name": "assert"
                   },
                   "rhs_type": "EXPR_TYPE_IDENTIFIER",
                   "rhs": {
                     "node": "identifier",
-                    "identifier_name": "print"
+                    "identifier_name": "type"
                   },
                   "condition_type": "EXPR_TYPE_NULL",
                   "condition": null
@@ -899,11 +817,10 @@
                       {
                         "node": "expression",
                         "op": "NOP",
-                        "lhs_type": "EXPR_TYPE_LITERAL",
+                        "lhs_type": "EXPR_TYPE_IDENTIFIER",
                         "lhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_STR",
-                          "data": "entered {x}"
+                          "node": "identifier",
+                          "identifier_name": "y"
                         },
                         "rhs_type": "EXPR_TYPE_NULL",
                         "rhs": null,
@@ -912,14 +829,18 @@
                       },
                       {
                         "node": "expression",
-                        "op": "NOP",
+                        "op": ".",
                         "lhs_type": "EXPR_TYPE_IDENTIFIER",
                         "lhs": {
                           "node": "identifier",
-                          "identifier_name": "lf"
+                          "identifier_name": "Types"
                         },
-                        "rhs_type": "EXPR_TYPE_NULL",
-                        "rhs": null,
+                        "rhs_type": "EXPR_TYPE_LITERAL",
+                        "rhs": {
+                          "node": "literal",
+                          "type": "DATA_TYPE_STR",
+                          "data": "I64"
+                        },
                         "condition_type": "EXPR_TYPE_NULL",
                         "condition": null
                       }
@@ -933,13 +854,13 @@
           },
           {
             "node": "statement",
-            "line_no": 25,
+            "line_no": 10,
             "type": "STATEMENT_TYPE_ASSIGNMENT",
             "statement": {
               "node": "assignment",
               "lhs": {
                 "node": "identifier",
-                "identifier_name": "x"
+                "identifier_name": "obj"
               },
               "rhs": {
                 "node": "expression",
@@ -947,8 +868,52 @@
                 "lhs_type": "EXPR_TYPE_LITERAL",
                 "lhs": {
                   "node": "literal",
-                  "type": "DATA_TYPE_BUL",
-                  "data": true
+                  "type": "DATA_TYPE_MAP",
+                  "data": {
+                    "node": "assoc_list",
+                    "assoc_list": [
+                      {
+                        "key": {
+                          "node": "literal",
+                          "type": "DATA_TYPE_STR",
+                          "data": "x"
+                        },
+                        "value": {
+                          "node": "expression",
+                          "op": "NOP",
+                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                          "lhs": {
+                            "node": "identifier",
+                            "identifier_name": "x"
+                          },
+                          "rhs_type": "EXPR_TYPE_NULL",
+                          "rhs": null,
+                          "condition_type": "EXPR_TYPE_NULL",
+                          "condition": null
+                        }
+                      },
+                      {
+                        "key": {
+                          "node": "literal",
+                          "type": "DATA_TYPE_STR",
+                          "data": "y"
+                        },
+                        "value": {
+                          "node": "expression",
+                          "op": "NOP",
+                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                          "lhs": {
+                            "node": "identifier",
+                            "identifier_name": "y"
+                          },
+                          "rhs_type": "EXPR_TYPE_NULL",
+                          "rhs": null,
+                          "condition_type": "EXPR_TYPE_NULL",
+                          "condition": null
+                        }
+                      }
+                    ]
+                  }
                 },
                 "rhs_type": "EXPR_TYPE_NULL",
                 "rhs": null,
@@ -959,67 +924,36 @@
           },
           {
             "node": "statement",
-            "line_no": 26,
+            "line_no": 12,
             "type": "STATEMENT_TYPE_ASSIGNMENT",
             "statement": {
               "node": "assignment",
               "lhs": null,
               "rhs": {
                 "node": "expression",
-                "op": "()",
+                "op": "= const",
                 "lhs_type": "EXPR_TYPE_EXPRESSION",
                 "lhs": {
                   "node": "expression",
-                  "op": "::",
+                  "op": ".",
                   "lhs_type": "EXPR_TYPE_IDENTIFIER",
                   "lhs": {
                     "node": "identifier",
-                    "identifier_name": "io"
+                    "identifier_name": "obj"
                   },
-                  "rhs_type": "EXPR_TYPE_IDENTIFIER",
+                  "rhs_type": "EXPR_TYPE_LITERAL",
                   "rhs": {
-                    "node": "identifier",
-                    "identifier_name": "print"
+                    "node": "literal",
+                    "type": "DATA_TYPE_STR",
+                    "data": "toStr"
                   },
                   "condition_type": "EXPR_TYPE_NULL",
                   "condition": null
                 },
-                "rhs_type": "EXPR_TYPE_LITERAL",
+                "rhs_type": "EXPR_TYPE_IDENTIFIER",
                 "rhs": {
-                  "node": "literal",
-                  "type": "DATA_TYPE_LST",
-                  "data": {
-                    "node": "comma_list",
-                    "comma_list": [
-                      {
-                        "node": "expression",
-                        "op": "NOP",
-                        "lhs_type": "EXPR_TYPE_LITERAL",
-                        "lhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_STR",
-                          "data": "bool value = {x}"
-                        },
-                        "rhs_type": "EXPR_TYPE_NULL",
-                        "rhs": null,
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null
-                      },
-                      {
-                        "node": "expression",
-                        "op": "NOP",
-                        "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                        "lhs": {
-                          "node": "identifier",
-                          "identifier_name": "lf"
-                        },
-                        "rhs_type": "EXPR_TYPE_NULL",
-                        "rhs": null,
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null
-                      }
-                    ]
-                  }
+                  "node": "identifier",
+                  "identifier_name": "toStr"
                 },
                 "condition_type": "EXPR_TYPE_NULL",
                 "condition": null
@@ -1028,7 +962,64 @@
           },
           {
             "node": "statement",
-            "line_no": 27,
+            "line_no": 14,
+            "type": "STATEMENT_TYPE_RETURN",
+            "statement": {
+              "node": "expression",
+              "op": "NOP",
+              "lhs_type": "EXPR_TYPE_IDENTIFIER",
+              "lhs": {
+                "node": "identifier",
+                "identifier_name": "obj"
+              },
+              "rhs_type": "EXPR_TYPE_NULL",
+              "rhs": null,
+              "condition_type": "EXPR_TYPE_NULL",
+              "condition": null
+            }
+          }
+        ]
+      }
+    },
+    "toStr": {
+      "node": "procedure",
+      "file": "examples/inheritance/base.shsc",
+      "fnargs_list": null,
+      "statements": {
+        "node": "statements",
+        "statements": [
+          {
+            "node": "statement",
+            "line_no": 18,
+            "type": "STATEMENT_TYPE_ASSIGNMENT",
+            "statement": {
+              "node": "assignment",
+              "lhs": {
+                "node": "identifier",
+                "identifier_name": "x"
+              },
+              "rhs": {
+                "node": "expression",
+                "op": ".",
+                "lhs_type": "EXPR_TYPE_IDENTIFIER",
+                "lhs": {
+                  "node": "identifier",
+                  "identifier_name": "this"
+                },
+                "rhs_type": "EXPR_TYPE_LITERAL",
+                "rhs": {
+                  "node": "literal",
+                  "type": "DATA_TYPE_STR",
+                  "data": "x"
+                },
+                "condition_type": "EXPR_TYPE_NULL",
+                "condition": null
+              }
+            }
+          },
+          {
+            "node": "statement",
+            "line_no": 19,
             "type": "STATEMENT_TYPE_ASSIGNMENT",
             "statement": {
               "node": "assignment",
@@ -1038,182 +1029,18 @@
               },
               "rhs": {
                 "node": "expression",
-                "op": "?:",
-                "lhs_type": "EXPR_TYPE_LITERAL",
+                "op": ".",
+                "lhs_type": "EXPR_TYPE_IDENTIFIER",
                 "lhs": {
-                  "node": "literal",
-                  "type": "DATA_TYPE_I64",
-                  "data": 5
+                  "node": "identifier",
+                  "identifier_name": "this"
                 },
                 "rhs_type": "EXPR_TYPE_LITERAL",
                 "rhs": {
                   "node": "literal",
-                  "type": "DATA_TYPE_I64",
-                  "data": 7
+                  "type": "DATA_TYPE_STR",
+                  "data": "y"
                 },
-                "condition_type": "EXPR_TYPE_EXPRESSION",
-                "condition": {
-                  "node": "expression",
-                  "op": "==",
-                  "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                  "lhs": {
-                    "node": "identifier",
-                    "identifier_name": "x"
-                  },
-                  "rhs_type": "EXPR_TYPE_LITERAL",
-                  "rhs": {
-                    "node": "literal",
-                    "type": "DATA_TYPE_BUL",
-                    "data": false
-                  },
-                  "condition_type": "EXPR_TYPE_NULL",
-                  "condition": null
-                }
-              }
-            }
-          },
-          {
-            "node": "statement",
-            "line_no": 30,
-            "type": "STATEMENT_TYPE_COMPOUND",
-            "statement": {
-              "node": "if_block",
-              "condition": {
-                "node": "expression",
-                "op": "==",
-                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                "lhs": {
-                  "node": "identifier",
-                  "identifier_name": "y"
-                },
-                "rhs_type": "EXPR_TYPE_LITERAL",
-                "rhs": {
-                  "node": "literal",
-                  "type": "DATA_TYPE_I64",
-                  "data": 5
-                },
-                "condition_type": "EXPR_TYPE_NULL",
-                "condition": null
-              },
-              "if_st": {
-                "node": "statements",
-                "statements": [
-                  {
-                    "node": "statement",
-                    "line_no": 29,
-                    "type": "STATEMENT_TYPE_ASSIGNMENT",
-                    "statement": {
-                      "node": "assignment",
-                      "lhs": null,
-                      "rhs": {
-                        "node": "expression",
-                        "op": "()",
-                        "lhs_type": "EXPR_TYPE_EXPRESSION",
-                        "lhs": {
-                          "node": "expression",
-                          "op": "::",
-                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "lhs": {
-                            "node": "identifier",
-                            "identifier_name": "io"
-                          },
-                          "rhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "rhs": {
-                            "node": "identifier",
-                            "identifier_name": "print"
-                          },
-                          "condition_type": "EXPR_TYPE_NULL",
-                          "condition": null
-                        },
-                        "rhs_type": "EXPR_TYPE_LITERAL",
-                        "rhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_LST",
-                          "data": {
-                            "node": "comma_list",
-                            "comma_list": [
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_STR",
-                                  "data": "x was false"
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              },
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                                "lhs": {
-                                  "node": "identifier",
-                                  "identifier_name": "lf"
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              }
-                            ]
-                          }
-                        },
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null
-                      }
-                    }
-                  }
-                ]
-              },
-              "else_block": null
-            }
-          }
-        ]
-      }
-    },
-    "test": {
-      "node": "procedure",
-      "file": "examples/helloworld.shsc",
-      "fnargs_list": {
-        "node": "fnargs_list",
-        "fnargs_list": [
-          {
-            "node": "identifier",
-            "identifier_name": "string"
-          },
-          {
-            "node": "identifier",
-            "identifier_name": "list"
-          }
-        ]
-      },
-      "statements": {
-        "node": "statements",
-        "statements": [
-          {
-            "node": "statement",
-            "line_no": 4,
-            "type": "STATEMENT_TYPE_ASSIGNMENT",
-            "statement": {
-              "node": "assignment",
-              "lhs": {
-                "node": "identifier",
-                "identifier_name": "times"
-              },
-              "rhs": {
-                "node": "expression",
-                "op": "NOP",
-                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                "lhs": {
-                  "node": "identifier",
-                  "identifier_name": "list"
-                },
-                "rhs_type": "EXPR_TYPE_NULL",
-                "rhs": null,
                 "condition_type": "EXPR_TYPE_NULL",
                 "condition": null
               }
@@ -1221,283 +1048,7 @@
           },
           {
             "node": "statement",
-            "line_no": 10,
-            "type": "STATEMENT_TYPE_COMPOUND",
-            "statement": {
-              "node": "for_block",
-              "type": "FORBLOCK_TYPE_LIST",
-              "idx": null,
-              "val": {
-                "node": "identifier",
-                "identifier_name": "x"
-              },
-              "it": {
-                "node": "expression",
-                "op": "NOP",
-                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                "lhs": {
-                  "node": "identifier",
-                  "identifier_name": "times"
-                },
-                "rhs_type": "EXPR_TYPE_NULL",
-                "rhs": null,
-                "condition_type": "EXPR_TYPE_NULL",
-                "condition": null
-              },
-              "statements": {
-                "node": "statements",
-                "statements": [
-                  {
-                    "node": "statement",
-                    "line_no": 6,
-                    "type": "STATEMENT_TYPE_ASSIGNMENT",
-                    "statement": {
-                      "node": "assignment",
-                      "lhs": {
-                        "node": "identifier",
-                        "identifier_name": "name"
-                      },
-                      "rhs": {
-                        "node": "expression",
-                        "op": "()",
-                        "lhs_type": "EXPR_TYPE_EXPRESSION",
-                        "lhs": {
-                          "node": "expression",
-                          "op": "::",
-                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "lhs": {
-                            "node": "identifier",
-                            "identifier_name": "io"
-                          },
-                          "rhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "rhs": {
-                            "node": "identifier",
-                            "identifier_name": "input"
-                          },
-                          "condition_type": "EXPR_TYPE_NULL",
-                          "condition": null
-                        },
-                        "rhs_type": "EXPR_TYPE_LITERAL",
-                        "rhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_LST",
-                          "data": {
-                            "node": "comma_list",
-                            "comma_list": [
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_STR",
-                                  "data": "Enter name {x}: "
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              },
-                              {
-                                "node": "expression",
-                                "op": ".",
-                                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                                "lhs": {
-                                  "node": "identifier",
-                                  "identifier_name": "Types"
-                                },
-                                "rhs_type": "EXPR_TYPE_LITERAL",
-                                "rhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_STR",
-                                  "data": "STR"
-                                },
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              }
-                            ]
-                          }
-                        },
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null
-                      }
-                    }
-                  },
-                  {
-                    "node": "statement",
-                    "line_no": 8,
-                    "type": "STATEMENT_TYPE_ASSIGNMENT",
-                    "statement": {
-                      "node": "assignment",
-                      "lhs": {
-                        "node": "identifier",
-                        "identifier_name": "bytes"
-                      },
-                      "rhs": {
-                        "node": "expression",
-                        "op": "()",
-                        "lhs_type": "EXPR_TYPE_EXPRESSION",
-                        "lhs": {
-                          "node": "expression",
-                          "op": "::",
-                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "lhs": {
-                            "node": "identifier",
-                            "identifier_name": "io"
-                          },
-                          "rhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "rhs": {
-                            "node": "identifier",
-                            "identifier_name": "print"
-                          },
-                          "condition_type": "EXPR_TYPE_NULL",
-                          "condition": null
-                        },
-                        "rhs_type": "EXPR_TYPE_LITERAL",
-                        "rhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_LST",
-                          "data": {
-                            "node": "comma_list",
-                            "comma_list": [
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_STR",
-                                  "data": "Hello {name}!"
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              },
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_STR",
-                                  "data": "It's a beautiful world!"
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              },
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                                "lhs": {
-                                  "node": "identifier",
-                                  "identifier_name": "lf"
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              }
-                            ]
-                          }
-                        },
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null
-                      }
-                    }
-                  },
-                  {
-                    "node": "statement",
-                    "line_no": 9,
-                    "type": "STATEMENT_TYPE_ASSIGNMENT",
-                    "statement": {
-                      "node": "assignment",
-                      "lhs": null,
-                      "rhs": {
-                        "node": "expression",
-                        "op": "()",
-                        "lhs_type": "EXPR_TYPE_EXPRESSION",
-                        "lhs": {
-                          "node": "expression",
-                          "op": "::",
-                          "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "lhs": {
-                            "node": "identifier",
-                            "identifier_name": "io"
-                          },
-                          "rhs_type": "EXPR_TYPE_IDENTIFIER",
-                          "rhs": {
-                            "node": "identifier",
-                            "identifier_name": "print"
-                          },
-                          "condition_type": "EXPR_TYPE_NULL",
-                          "condition": null
-                        },
-                        "rhs_type": "EXPR_TYPE_LITERAL",
-                        "rhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_LST",
-                          "data": {
-                            "node": "comma_list",
-                            "comma_list": [
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_LITERAL",
-                                "lhs": {
-                                  "node": "literal",
-                                  "type": "DATA_TYPE_STR",
-                                  "data": "Printed: {bytes} Bytes"
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              },
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                                "lhs": {
-                                  "node": "identifier",
-                                  "identifier_name": "lf"
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              },
-                              {
-                                "node": "expression",
-                                "op": "NOP",
-                                "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                                "lhs": {
-                                  "node": "identifier",
-                                  "identifier_name": "lf"
-                                },
-                                "rhs_type": "EXPR_TYPE_NULL",
-                                "rhs": null,
-                                "condition_type": "EXPR_TYPE_NULL",
-                                "condition": null
-                              }
-                            ]
-                          }
-                        },
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          {
-            "node": "statement",
-            "line_no": 11,
+            "line_no": 20,
             "type": "STATEMENT_TYPE_RETURN",
             "statement": {
               "node": "expression",
@@ -1505,8 +1056,8 @@
               "lhs_type": "EXPR_TYPE_LITERAL",
               "lhs": {
                 "node": "literal",
-                "type": "DATA_TYPE_I64",
-                "data": 100
+                "type": "DATA_TYPE_STR",
+                "data": "{x}, {y}"
               },
               "rhs_type": "EXPR_TYPE_NULL",
               "rhs": null,
