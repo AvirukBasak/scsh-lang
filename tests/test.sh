@@ -51,7 +51,7 @@ make run-sanitize ARGS="$testpath/oop/*.shsc"
 
 echo -e "\n-----------------------------------------------------\n"
 echo -e ">> Running $testpath/inheritance/\n"
-make run-sanitize ARGS="$testpath/inheritance/*.shsc"
+make run-sanitize ARGS="$testpath/inheritance/*.shsc -args 123 abc 1 2 3"
 
 
 
@@ -61,12 +61,12 @@ testpath="$(realpath "$testpath")"
 
 
 echo -e "\n-----------------------------------------------------\n"
-echo -e ">> Bulk running $testpath/build.txt\n"
+echo -e ">> Bulk running using examples/inheritance/listfile\n"
 # flag -tf test
-# run make run-sanitize ARGS="-tf tests/SyntaxTree.json -r tests/build.txt"
+# run make run-sanitize ARGS="-tf tests/SyntaxTree.json -r examples/inheritance/listfile"
 # test fails if theres a difference between old and new SyntaxTree.json
 # this can be checked with git
-make run-sanitize ARGS="-tf tests/SyntaxTree.json -r tests/build.txt"
+make run-sanitize ARGS="-tf tests/SyntaxTree.json -r examples/inheritance/listfile -args 123 abc 1 2 3"
 
 # check if there are any differences between old and new SyntaxTree.json
 # if there are differences, the test fails
