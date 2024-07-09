@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#define VERSION "1.7 Beta"
+#define VERSION "1.8 Beta"
 #define AUTHORS "Aviruk Basak"
 #define GLOBAL_BYTES_BUFFER_LEN (128)
 
