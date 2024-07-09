@@ -132,7 +132,7 @@ file that has no extension
 Run the tests using the list file
 ```
 # tested using examples/inheritance/listfile list file
-shsc -r examples/inheritance/listfile
+shsc -r examples/inheritance/listfile -args abc 123 1 2 3
 ```
 Output the AST to a file
 ```
