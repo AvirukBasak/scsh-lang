@@ -161,17 +161,6 @@
                         }
                       },
                       {
-                        "node": "expression",
-                        "op": "NOP",
-                        "lhs_type": "EXPR_TYPE_IDENTIFIER",
-                        "lhs": {
-                          "node": "identifier",
-                          "identifier_name": "i64"
-                        },
-                        "rhs_type": "EXPR_TYPE_NULL",
-                        "rhs": null,
-                        "condition_type": "EXPR_TYPE_NULL",
-                        "condition": null,
                         "key": {
                           "node": "literal",
                           "type": "DATA_TYPE_STR",
@@ -768,18 +757,14 @@
                       },
                       {
                         "node": "expression",
-                        "op": ".",
+                        "op": "NOP",
                         "lhs_type": "EXPR_TYPE_IDENTIFIER",
                         "lhs": {
                           "node": "identifier",
-                          "identifier_name": "Types"
+                          "identifier_name": "i64"
                         },
-                        "rhs_type": "EXPR_TYPE_LITERAL",
-                        "rhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_STR",
-                          "data": "I64"
-                        },
+                        "rhs_type": "EXPR_TYPE_NULL",
+                        "rhs": null,
                         "condition_type": "EXPR_TYPE_NULL",
                         "condition": null
                       }
@@ -840,18 +825,14 @@
                       },
                       {
                         "node": "expression",
-                        "op": ".",
+                        "op": "NOP",
                         "lhs_type": "EXPR_TYPE_IDENTIFIER",
                         "lhs": {
                           "node": "identifier",
-                          "identifier_name": "Types"
+                          "identifier_name": "i64"
                         },
-                        "rhs_type": "EXPR_TYPE_LITERAL",
-                        "rhs": {
-                          "node": "literal",
-                          "type": "DATA_TYPE_STR",
-                          "data": "I64"
-                        },
+                        "rhs_type": "EXPR_TYPE_NULL",
+                        "rhs": null,
                         "condition_type": "EXPR_TYPE_NULL",
                         "condition": null
                       }
