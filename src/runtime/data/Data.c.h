@@ -470,10 +470,10 @@ char *rt_Data_interp_str_parse(const char *str_)
         *(closing++) = '\0';
         if (!rt_Data_Identifier_isvalid(&str[i] +1))
             rt_throw("invalid interpolation identifier: '%s'", &str[i] +1);
-        rt_Data_t var = *rt_VarTable_getref(&str[i] +1);
-        if (rt_Data_isnull(var))
+        rt_Data_t *var = rt_VarTable_getref_errnull(&str[i] +1);
+        if (!var)
             rt_throw("undeclared identifier: '%s'", &str[i] +1);
-        char *val = rt_Data_tostr(var);
+        char *val = rt_Data_tostr(*var);
         size_t sz = strlen(val) +1;
         ret = (char*) realloc(ret, (ret_sz += sz) * sizeof(char));
         if (!ret) io_errndie("rt_Data_interp_str_parse:" ERR_MSG_REALLOCFAIL);
