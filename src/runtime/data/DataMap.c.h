@@ -65,8 +65,7 @@ void rt_DataMap_destroy_circular(rt_DataMap_t **ptr, bool flag)
     if (!ptr || !*ptr) return;
     rt_DataMap_t *mp = *ptr;
     /* ref counting */
-    --mp->rc;
-    if (mp->rc < 0) mp->rc = 0;
+    rt_DataMap_decrefc(mp);
     if (mp->rc > 0) {
         /* if rc > 0, check if the data has only cyclic references
            if so, set rc to 0 to free the data */

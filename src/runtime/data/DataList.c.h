@@ -58,8 +58,7 @@ void rt_DataList_destroy_circular(rt_DataList_t **ptr, bool flag)
     if (!ptr || !*ptr) return;
     rt_DataList_t *lst = *ptr;
     /* ref counting */
-    --lst->rc;
-    if (lst->rc < 0) lst->rc = 0;
+    rt_DataList_decrefc(lst);
     if (lst->rc > 0) {
         /* if rc > 0, check if the data has only cyclic references
            if so, set rc to 0 to free the data */
