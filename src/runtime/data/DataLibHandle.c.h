@@ -80,8 +80,7 @@ void rt_DataLibHandle_destroy(rt_DataLibHandle_t **ptr)
     rt_DataLibHandle_t *handle = *ptr;
 
     /* ref counting */
-    --handle->rc;
-    if (handle->rc < 0) handle->rc = 0;
+    rt_DataLibHandle_decrefc(handle);
     if (handle->rc > 0) return;
 
 #ifdef _WIN32
