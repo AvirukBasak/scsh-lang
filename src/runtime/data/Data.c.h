@@ -336,6 +336,7 @@ void rt_Data_destroy_circular(rt_Data_t *var, bool flag)
             if (lambda.type == rt_DATA_LAMBDA_TYPE_NATIVE) {
                 rt_DataLibHandle_destroy(&lambda.fnptr.native.handle);
                 rt_DataStr_destroy(&lambda.fnptr.native.fn_name);
+                if (!lambda.fnptr.native.handle) *var = rt_Data_null();
             }
         }
     }
