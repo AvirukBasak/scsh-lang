@@ -411,8 +411,10 @@ int64_t rt_Data_compare(const rt_Data_t var1, const rt_Data_t var2)
             case rt_DATA_TYPE_LST:
                 diff = (double) rt_DataList_compare(var1_.data.lst, var2_.data.lst);
                 break;
-            case rt_DATA_TYPE_MAP:
             case rt_DATA_TYPE_ANY:
+                io_errndie("rt_Data_compare: greater_type should never be rt_DATA_TYPE_ANY");
+                break;
+            case rt_DATA_TYPE_MAP:
             case rt_DATA_TYPE_PROC:
             case rt_DATA_TYPE_LAMBDA:
             case rt_DATA_TYPE_LIBHANDLE:
@@ -421,6 +423,11 @@ int64_t rt_Data_compare(const rt_Data_t var1, const rt_Data_t var2)
         }
         rt_Data_destroy(&var1_);
         rt_Data_destroy(&var2_);
+    }
+    else if (rt_Data_isnull(var1) && rt_Data_isnull(var2)) {
+        diff = 0;
+    } else if (rt_Data_isnull(var1) || rt_Data_isnull(var2)) {
+        diff = 1;
     }
     else rt_throw("cannot compare type '%s' with type '%s'",
         rt_Data_typename(var2), rt_Data_typename(var1));
