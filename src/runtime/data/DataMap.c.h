@@ -9,8 +9,10 @@
 
 #include "io.h"
 #include "errcodes.h"
+#include "runtime/VarTable.h"
 #include "runtime/data/Data.h"
 #include "runtime/data/DataMap.h"
+#include "runtime/data/DataList.h"
 #include "runtime/data/DataStr.h"
 #include "runtime/data/GarbageColl.h"
 #include "runtime/io.h"
@@ -21,7 +23,7 @@ rt_DataMap_t *rt_DataMap_init()
     rt_DataMap_t *mp = (rt_DataMap_t*) malloc(sizeof(rt_DataMap_t));
     if (!mp) io_errndie("rt_DataMap_init:" ERR_MSG_MALLOCFAIL);
     mp->data_map = kh_init(rt_DataMap_t);
-    mp->length = 0;
+    mp->data_list = rt_DataList_init();
     /* rc is kept at 0 unless the runtime assigns
        a variable to the data */
     mp->rc = 0;
@@ -38,15 +40,17 @@ rt_DataMap_t *rt_DataMap_clone(const rt_DataMap_t *mp)
     ) {
         if (!rt_DataMap_exists((rt_DataMap_t*) mp, entry_it)) continue;
         const char *key = rt_DataMap_get((rt_DataMap_t*) mp, entry_it)->key;
-        rt_Data_t value = rt_DataMap_get((rt_DataMap_t*) mp, entry_it)->value;
-        rt_DataMap_insert(mp_copy, key, value);
+        /* get ref to data */
+        int64_t idx = rt_DataMap_get((rt_DataMap_t*) mp, entry_it)->idx;
+        rt_Data_t *dataref = rt_DataList_getref_errnull(mp->data_list, idx);
+        rt_DataMap_insert(mp_copy, key, *dataref);
     }
     return mp_copy;
 }
 
 int64_t rt_DataMap_length(const rt_DataMap_t *mp)
 {
-    return mp->length;
+    return rt_DataList_length(mp->data_list);
 }
 
 void rt_DataMap_increfc(rt_DataMap_t *mp)
@@ -78,18 +82,15 @@ void rt_DataMap_destroy_circular(rt_DataMap_t **ptr, bool flag)
     /* free if rc 0, iterate through each entry and destroy it */
     for (khiter_t entry_it = kh_begin(mp->data_map); entry_it != kh_end(mp->data_map); ++entry_it) {
         if (!kh_exist(mp->data_map, entry_it)) continue;
-        /* decrement refcnt, if 0, data gets destroyed */
-        rt_Data_destroy_circular(
-            &kh_value(mp->data_map, entry_it).value,
-            flag
-        );
         /* free the key */
         if (kh_value(mp->data_map, entry_it).key)
             free(kh_value(mp->data_map, entry_it).key);
         kh_value(mp->data_map, entry_it).key = NULL;
     }
     kh_destroy(rt_DataMap_t, mp->data_map);
+    rt_DataList_destroy(&mp->data_list);
     mp->data_map = NULL;
+    mp->data_list = NULL;
     free(mp);
     *ptr = NULL;
 }
@@ -101,36 +102,52 @@ void rt_DataMap_destroy(rt_DataMap_t **ptr)
 
 void rt_DataMap_insert(rt_DataMap_t *mp, const char *key, rt_Data_t value)
 {
-    rt_Data_increfc(&value);
     khiter_t entry_it = kh_get(rt_DataMap_t, mp->data_map, key);
+    int64_t list_idx = -1;
     if (entry_it != kh_end(mp->data_map)) {
-        /* key exists, reduce original value ref count */
-        rt_Data_destroy(&kh_value(mp->data_map, entry_it).value);
+        /* get ref to data */
+        list_idx = kh_value(mp->data_map, entry_it).idx;
     } else {
         int ret;
         /* key doesn't exist, create duplicate key and have kh keep a reference
            to it so that the key can be accessed via kh_key macro */
         char *key_internal = strdup(key);
         entry_it = kh_put(rt_DataMap_t, mp->data_map, key_internal, &ret);
+        /* append null instead of value to the list to avoid
+           incrementing ref count of value */
+        rt_DataList_append(mp->data_list, rt_Data_null());
+        list_idx = rt_DataList_length(mp->data_list) -1;
         kh_value(mp->data_map, entry_it).key = key_internal;
-        ++mp->length;
+        kh_value(mp->data_map, entry_it).idx = list_idx;
     }
-    kh_value(mp->data_map, entry_it).value = (rt_Data_t) {
-        .type = value.type,
-        .data = value.data,
-        .is_const = false,
-        .is_weak = false,
-    };
+    /* set lvalue to true so that the dest can be modified */
+    rt_DataList_getref(mp->data_list, list_idx)->lvalue = true;
+    /* put value in the list by reference, modf automatically updates refcnt */
+    rt_VarTable_modf(
+        rt_DataList_getref(mp->data_list, list_idx),
+        value,
+        false,
+        false
+    );
 }
 
 void rt_DataMap_del(rt_DataMap_t *mp, const char *key)
 {
     khiter_t entry_it = kh_get(rt_DataMap_t, mp->data_map, key);
     if (entry_it == kh_end(mp->data_map)) rt_throw("map has no key '%s'", key);
-    rt_Data_destroy(&kh_value(mp->data_map, entry_it).value);
+    /* get ref to data */
+    int64_t idx = kh_value(mp->data_map, entry_it).idx;
+    /* set lvalue to true so that the dest can be modified */
+    rt_DataList_getref(mp->data_list, idx)->lvalue = true;
+    /* put null in the list, modf automatically updates refcnt */
+    rt_VarTable_modf(
+        rt_DataList_getref(mp->data_list, idx),
+        rt_Data_null(),
+        false,
+        false
+    );
     free(kh_value(mp->data_map, entry_it).key);
     kh_del(rt_DataMap_t, mp->data_map, entry_it);
-    --mp->length;
 }
 
 void rt_DataMap_concat(rt_DataMap_t *mp1, const rt_DataMap_t *mp2)
@@ -138,8 +155,10 @@ void rt_DataMap_concat(rt_DataMap_t *mp1, const rt_DataMap_t *mp2)
     for (khiter_t entry_it = kh_begin(mp2->data_map); entry_it != kh_end(mp2->data_map); ++entry_it) {
         if (!kh_exist(mp2->data_map, entry_it)) continue;
         const char *key = kh_key(mp2->data_map, entry_it);
-        rt_DataMap_insert((rt_DataMap_t*) mp1, key,
-            kh_value(mp2->data_map, entry_it).value);
+        /* get ref to data */
+        int64_t idx = kh_value(mp2->data_map, entry_it).idx;
+        rt_Data_t *dataref = rt_DataList_getref_errnull(mp2->data_list, idx);
+        rt_DataMap_insert(mp1, key, *dataref);
     }
 }
 
@@ -156,8 +175,11 @@ rt_Data_t *rt_DataMap_getref_errnull(const rt_DataMap_t *mp, const char *key)
 {
     khiter_t entry_it = kh_get(rt_DataMap_t, mp->data_map, key);
     /* key found, return its value */
-    if (entry_it != kh_end(mp->data_map))
-        return &kh_value(mp->data_map, entry_it).value;
+    if (entry_it != kh_end(mp->data_map)) {
+        /* get ref to data */
+        int64_t idx = kh_value(mp->data_map, entry_it).idx;
+        return rt_DataList_getref_errnull(mp->data_list, idx);
+    }
     return NULL;
 }
 
@@ -186,7 +208,9 @@ char *rt_DataMap_tostr(const rt_DataMap_t *mp)
 
         const char *mp_ky = kh_key(mp->data_map, entry_it);
 
-        const rt_Data_t data_val = kh_value(mp->data_map, entry_it).value;
+        /* get ref to data */
+        int64_t idx = kh_value(mp->data_map, entry_it).idx;
+        const rt_Data_t data_val = *rt_DataList_getref_errnull(mp->data_list, idx);
         char *mp_el = rt_Data_tostr(data_val);
         char *mp_el_escaped = io_partial_escape_string(mp_el);
         free(mp_el);
@@ -207,7 +231,7 @@ char *rt_DataMap_tostr(const rt_DataMap_t *mp)
         free(mp_el_escaped);
         mp_ky = mp_el_escaped = NULL;
         p += sz -1;
-        if (count_len++ < mp->length -1) {
+        if (count_len++ < rt_DataMap_length(mp) -1) {
             str = (char*) realloc(str, (size += 2) * sizeof(char));
             if (!str) io_errndie("rt_DataMap_tostr:" ERR_MSG_REALLOCFAIL);
             sprintf(&str[p], ", ");
