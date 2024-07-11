@@ -6,10 +6,14 @@ proc main()
     io:print(f"result = {res}\n")
 end
 
-proc fibonacci(num)
-    if num <= 1 then
-        return num
+proc fibonacci(num, dp)
+    assert:type(num, Types.I64)
+    assert:type(dp, Types.MAP)
+    if dp[num] then
+        return dp[num]
+    elif num <= 1 then
+        return dp[num] = num
     else
-        return fibonacci(num - 1) + fibonacci(num - 2)
+        return dp[num] = fibonacci(num - 1, dp) + fibonacci(num - 2, dp)
     end
 end
