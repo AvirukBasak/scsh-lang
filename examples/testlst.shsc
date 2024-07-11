@@ -17,5 +17,5 @@ proc main()
     io:print(lst:find(lst2, "c"), lf)
     io:print(lst:join(lst1, "/"), lf)
     io:print(lst:sort(lst2), lf)
-    io:println([], cast([], Types.BUL))
+    io:println([], cast([], bul))
 end

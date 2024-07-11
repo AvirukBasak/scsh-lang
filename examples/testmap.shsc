@@ -11,5 +11,5 @@ proc main()
     io:print(x, lf)
     io:print(map:find(x, "c"), lf)
     io:print(map:keys(x), lf)
-    io:println({}, cast({}, Types.BUL))
+    io:println({}, cast({}, bul))
 end

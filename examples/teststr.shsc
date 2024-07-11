@@ -20,5 +20,5 @@ proc main()
     io:print(str:toi64("452"), lf)
     io:print(str:tof64("56.9"), lf)
     io:print(str:sort(str1), lf)
-    io:println("\"\"", cast("", Types.BUL))
+    io:println("\"\"", cast("", bul))
 end
