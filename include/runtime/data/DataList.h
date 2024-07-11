@@ -7,9 +7,17 @@
 #include "runtime/data/Data.h"
 
 struct rt_DataList_t {
-    rt_Data_t *var;
+    /** uses a r x matlen matrix, where each row is allocated once
+        and never reallocated. This is done to prevent existing refs
+        to elements from changing due to reallocation
+    NOTE
+        capacity = r * matlen
+        length <= capacity
+    */
+    rt_Data_t **list;
     int64_t length;
-    size_t capacity;
+    int64_t rowcnt;
+    int64_t matlen;
     int64_t rc;
 };
 
@@ -29,9 +37,11 @@ struct rt_DataList_t {
 
 
 rt_DataList_t *rt_DataList_init();
+rt_DataList_t *rt_DataList_init_matlen(int64_t matlen);
 rt_DataList_t *rt_DataList_clone(const rt_DataList_t *lst);
 
 int64_t rt_DataList_length(const rt_DataList_t *lst);
+int64_t rt_DataList_capacity(const rt_DataList_t *lst);
 void rt_DataList_increfc(rt_DataList_t *lst);
 void rt_DataList_decrefc(rt_DataList_t *lst);
 

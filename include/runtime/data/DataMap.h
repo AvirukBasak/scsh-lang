@@ -13,14 +13,14 @@ enum rt_DataMap_CommonLockIds {
 
 typedef struct {
     char *key;
-    rt_Data_t value;
+    int64_t idx;
 } rt_DataMap_Entry_t;
 
 KHASH_MAP_INIT_STR(rt_DataMap_t, rt_DataMap_Entry_t)
 
 struct rt_DataMap_t {
     khash_t(rt_DataMap_t) *data_map;
-    int64_t length;
+    rt_DataList_t *data_list;
     int64_t rc;
     rt_Data_t one_time_lock;
 };
