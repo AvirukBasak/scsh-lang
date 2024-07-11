@@ -506,7 +506,7 @@ bool rt_Data_tobool(const rt_Data_t var)
         case rt_DATA_TYPE_INTERP_STR:
             return !!var.data.str->var && !!rt_DataStr_length(var.data.str);
         case rt_DATA_TYPE_LST:
-            return !!var.data.lst->var && !!rt_DataList_length(var.data.lst);
+            return !!var.data.lst->list && !!rt_DataList_length(var.data.lst);
         case rt_DATA_TYPE_MAP:
             return !!var.data.mp->data_map && !!rt_DataMap_length(var.data.mp);
         case rt_DATA_TYPE_ANY:
