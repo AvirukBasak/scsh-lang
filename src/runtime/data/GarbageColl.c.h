@@ -191,7 +191,8 @@ void rt_data_GC_cyclic_count_helper(
             const rt_DataMap_Entry_t *entry = rt_DataMap_get(node.data.mp, it);
             if (!entry) continue;
             /* explicit cast to non-const */
-            rt_Data_t *ref = (rt_Data_t*) &entry->value;
+            /* get ref to data */
+            rt_Data_t *ref = rt_DataList_getref_errnull(node.data.mp->data_list, entry->idx);
             if (!ref) continue;
 #ifdef GC_DEBUG
             printf("    type: %s, ref: %p, target: %p\n",
