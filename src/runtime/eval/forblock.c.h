@@ -257,7 +257,9 @@ rt_ControlStatus_t rt_eval_ForBlock_map(
         rt_DataMap_Entry_t entry = *rt_DataMap_get(iterable.data.mp, entry_it);
         if (for_block->idx) rt_VarTable_create(for_block->idx,
             rt_Data_str(rt_DataStr_init(entry.key)), false, false);
-        rt_VarTable_create(for_block->val, entry.value, false, false);
+        /* get ref to data */
+        rt_Data_t *dataref = rt_DataList_getref_errnull(iterable.data.mp->data_list, entry.idx);
+        rt_VarTable_create(for_block->val, *dataref, false, false);
         /* execute code */
         ctrl = rt_eval_Statements(for_block->statements);
         if (ctrl == rt_CTRL_PASS)

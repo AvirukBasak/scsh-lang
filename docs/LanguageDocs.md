@@ -771,7 +771,12 @@ Note how order of keys is not maintained.
 
 Also note how data is stringified during conversion to string (printing).
 
-### Map with `const` Keys
+Note that accessing a non-existent key using `[]` or `.` will insert a `null` value into the map and return a reference to it.
+To make sure `null` is not inserted, use the built-in `map:get(map, str)` procedure (see [Module `map`](#module-map)).
+
+One may use the `map:find(map, str)` procedure to check if a key exists in the map.
+
+#### Map with `const` Keys
 A map can have `const` keys which prevent modification of the key.
 
 ```lua

@@ -13,6 +13,8 @@ Before you get started, please take a moment to read and follow these guidelines
 - [Naming Conventions](#naming-conventions)
 - [The eval functions](#the-eval-functions)
 - [Memory Management](#memory-management)
+- [Why Lists are in-fact Matrices](#why-lists-are-in-fact-matrices)
+- [Why Maps Internally Use Lists](#why-maps-internally-use-lists)
 - [Using the `RT_VTABLE_ACC` macro](#using-the-rt_acc_data-macro)
 - [Address Sanitizer](#address-sanitizer)
 - [Clangd LSP](#clangd)
@@ -99,6 +101,24 @@ However, be cautious as this can result in poor code quality, so use it judiciou
 
 For example, a list of `const` struct pointers may be created, but the functions of the list can't free them coz they may still have other references.
 So you may need to explicitly cast to non-`const` and free them from the list only if you're **SURE** that there is no other reference.
+
+## Why Lists are in-fact Matrices
+
+From `v1.8` and `v2.3` onwards, lists are implemented internally as a `rt_Data_t**` instead of a `rt_Data_t*`.
+
+Earlier, lists were implemented as a `rt_Data_t*` and resulted in full reallocation of the list when a new element was added. Apart from the performance hit, this also caused existing direct pointers to list elements to become invalid. The result was `heap-use-after-free` errors.
+
+The matrix implementation solves this problem by:
+- making `rt_Data_t**` an array of `rt_Data_t*`.
+- a row of `rt_Data_t` of some constant size is allocated and a pointer to it is held in the `rt_Data_t**`.
+- when a row is full, a new row is allocated and the pointer to it is stored in the `rt_Data_t**`.
+- existing rows are not reallocated, so any `rt_Data_t*` remains valid.
+
+## Why Maps Internally Use Lists
+
+From `v1.8` and `v2.3` onwards, maps are implemented internally as `rt_DataList_t*`. Previously, data was stored directly in the map. Currently, data is stored in a list and index of the list is stored in the map.
+
+This fixes the same issue that has been addressed in [Why Lists are in-fact Matrices](#why-lists-are-in-fact-matrices).
 
 ## Using the `RT_VTABLE_ACC` macro
 Definitiion

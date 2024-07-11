@@ -67,6 +67,15 @@ void rt_throw(const char *fmt, ...)
 #endif
 }
 
+#if defined(ASAN_CUSTOM_REPORT)
+
+void __asan_on_error()
+{
+    rt_throw("AddressSanitizer");
+}
+
+#endif
+
 #else
     #warning re-inclusion of module 'runtime/io.c.h'
 #endif

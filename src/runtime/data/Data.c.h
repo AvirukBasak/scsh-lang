@@ -336,6 +336,7 @@ void rt_Data_destroy_circular(rt_Data_t *var, bool flag)
             if (lambda.type == rt_DATA_LAMBDA_TYPE_NATIVE) {
                 rt_DataLibHandle_destroy(&lambda.fnptr.native.handle);
                 rt_DataStr_destroy(&lambda.fnptr.native.fn_name);
+                if (!lambda.fnptr.native.handle) *var = rt_Data_null();
             }
         }
     }
@@ -411,8 +412,10 @@ int64_t rt_Data_compare(const rt_Data_t var1, const rt_Data_t var2)
             case rt_DATA_TYPE_LST:
                 diff = (double) rt_DataList_compare(var1_.data.lst, var2_.data.lst);
                 break;
-            case rt_DATA_TYPE_MAP:
             case rt_DATA_TYPE_ANY:
+                io_errndie("rt_Data_compare: greater_type should never be rt_DATA_TYPE_ANY");
+                break;
+            case rt_DATA_TYPE_MAP:
             case rt_DATA_TYPE_PROC:
             case rt_DATA_TYPE_LAMBDA:
             case rt_DATA_TYPE_LIBHANDLE:
@@ -421,6 +424,11 @@ int64_t rt_Data_compare(const rt_Data_t var1, const rt_Data_t var2)
         }
         rt_Data_destroy(&var1_);
         rt_Data_destroy(&var2_);
+    }
+    else if (rt_Data_isnull(var1) && rt_Data_isnull(var2)) {
+        diff = 0;
+    } else if (rt_Data_isnull(var1) || rt_Data_isnull(var2)) {
+        diff = 1;
     }
     else rt_throw("cannot compare type '%s' with type '%s'",
         rt_Data_typename(var2), rt_Data_typename(var1));
@@ -463,10 +471,10 @@ char *rt_Data_interp_str_parse(const char *str_)
         *(closing++) = '\0';
         if (!rt_Data_Identifier_isvalid(&str[i] +1))
             rt_throw("invalid interpolation identifier: '%s'", &str[i] +1);
-        rt_Data_t var = *rt_VarTable_getref(&str[i] +1);
-        if (rt_Data_isnull(var))
+        rt_Data_t *var = rt_VarTable_getref_errnull(&str[i] +1);
+        if (!var)
             rt_throw("undeclared identifier: '%s'", &str[i] +1);
-        char *val = rt_Data_tostr(var);
+        char *val = rt_Data_tostr(*var);
         size_t sz = strlen(val) +1;
         ret = (char*) realloc(ret, (ret_sz += sz) * sizeof(char));
         if (!ret) io_errndie("rt_Data_interp_str_parse:" ERR_MSG_REALLOCFAIL);
@@ -498,7 +506,7 @@ bool rt_Data_tobool(const rt_Data_t var)
         case rt_DATA_TYPE_INTERP_STR:
             return !!var.data.str->var && !!rt_DataStr_length(var.data.str);
         case rt_DATA_TYPE_LST:
-            return !!var.data.lst->var && !!rt_DataList_length(var.data.lst);
+            return !!var.data.lst->list && !!rt_DataList_length(var.data.lst);
         case rt_DATA_TYPE_MAP:
             return !!var.data.mp->data_map && !!rt_DataMap_length(var.data.mp);
         case rt_DATA_TYPE_ANY:
