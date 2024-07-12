@@ -8,5 +8,11 @@ proc main()
 
     var platform = sys:platform()
     io:println(platform)
+
+    var (code, out, err) = sys:system("echo hello")
+    io:println("cod:", dbg:typename(code), code)
+    io:println("out:", dbg:typename(out), out)
+    io:println("err:", dbg:typename(err), err)
+
     sys:exit(5)
 end

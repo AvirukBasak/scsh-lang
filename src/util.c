@@ -1,8 +1,11 @@
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <inttypes.h>
 #include <time.h>
 
 #include "globals.h"
+#include "io.h"
 #include "util.h"
 
 #ifdef _WIN32
@@ -52,4 +55,65 @@ void util_sleep_ms(int milliseconds)
     }
     usleep((milliseconds % 1000) * 1000);
 #endif
+}
+
+int util_system(const char *command, char **outbuff, char **errbuff)
+{
+    const char *outfile = ".outfile.tmp",
+               *errfile = ".errfile.tmp";
+    FILE *out = fopen(outfile, "w"),
+         *err = fopen(errfile, "w");
+    const char *outredirect = " > ",
+               *errredirect = " 2> ";
+    char *cmdbuffer = malloc(16
+         + strlen(command)
+         + strlen(outredirect)
+         + strlen(outfile)
+         + strlen(errredirect)
+         + strlen(errfile)
+    );
+
+    sprintf(cmdbuffer, "%s %s %s %s %s", command, outredirect, outfile, errredirect, errfile);
+    int ret = system(cmdbuffer);
+
+    fclose(out);
+    fclose(err);
+
+    out = fopen(outfile, "r");
+    err = fopen(errfile, "r");
+
+    if (*outbuff) {
+        io_errndie("util_system: 'outbuff' should be NULL");
+    }
+    if (*errbuff) {
+        io_errndie("util_system: 'errbuff' should be NULL");
+    }
+
+    *outbuff = io_readfile(out);
+    *errbuff = io_readfile(err);
+
+    if ((*outbuff)[0] == '\0') {
+        free(*outbuff);
+        *outbuff = NULL;
+    }
+    if ((*errbuff)[0] == '\0') {
+        free(*errbuff);
+        *errbuff = NULL;
+    }
+
+    if (*outbuff && (*outbuff)[strlen(*outbuff) - 1] == '\n') {
+        (*outbuff)[strlen(*outbuff) - 1] = '\0';
+    }
+    if (*errbuff && (*errbuff)[strlen(*errbuff) - 1] == '\n') {
+        (*errbuff)[strlen(*errbuff) - 1] = '\0';
+    }
+
+    fclose(out);
+    fclose(err);
+
+    remove(outfile);
+    remove(errfile);
+
+    free(cmdbuffer);
+    return ret;
 }

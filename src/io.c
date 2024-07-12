@@ -70,6 +70,41 @@ ssize_t io_getline(char **lineptr, size_t *n, FILE *stream)
 
 #endif
 
+char *io_readfile(FILE *fp)
+{
+    if (!fp) io_errndie("io_readfile: " ERR_MSG_NULLPTR);
+    char buffer[1024] = "";
+    size_t buff_used = 0;
+
+    char *strbuf = (char*) malloc(sizeof(char) * 1024);
+    if (!strbuf) io_errndie("io_readfile: " ERR_MSG_MALLOCFAIL);
+    int idx = 0;
+    int cap = 1024;
+
+    /* read file in chunks of 4096 bytes and append to strbuf */
+    while ((buff_used = fread(buffer, sizeof(char), 1023, fp)) > 0) {
+        /* terminate the string */
+        buffer[buff_used] = '\0';
+        /* check for errors */
+        int error_num = errno;
+        if (ferror(fp)) {
+            fclose(fp);
+            io_errndie("io_readfile: failed to read from file: %s", strerror(error_num));
+        }
+        /* append to strbuf */
+        if (idx + buff_used >= cap) {
+            cap = cap * 2 + buff_used;
+            strbuf = (char*) realloc(strbuf, sizeof(char) * cap);
+            if (!strbuf) io_errndie("io_readfile: " ERR_MSG_REALLOCFAIL);
+        }
+        memcpy(strbuf + idx, buffer, buff_used);
+        idx += buff_used;
+    }
+
+    strbuf[idx] = '\0';
+    return strbuf;
+}
+
 long long io_get_filesize(const char *filepath)
 {
     FILE *file = fopen(filepath, "rb");

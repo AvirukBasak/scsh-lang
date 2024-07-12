@@ -191,28 +191,11 @@ rt_Data_t rt_fn_io_fread()
         strerror(errno)
     );
 
-    rt_DataStr_t *strbuf = rt_DataStr_init("");
-    char buffer[1024] = "";
-    size_t buff_used = 0;
-
-    /* read file in chunks of 4096 bytes and append to strbuf */
-    while ((buff_used = fread(buffer, sizeof(char), 1023, fp)) > 0) {
-        /* terminate the string */
-        buffer[buff_used] = '\0';
-        /* check for errors */
-        int error_num = errno;
-        if (ferror(fp)) {
-            fclose(fp);
-            rt_throw("failed to read from file '%s': %s",
-                filename_str, strerror(error_num));
-        }
-        rt_DataStr_t *chunk = rt_DataStr_init(buffer);
-        rt_DataStr_concat(strbuf, chunk);
-        rt_DataStr_destroy(&chunk);
-    }
-
+    char *buffer = io_readfile(fp);
+    rt_DataStr_t *strbuf = rt_DataStr_init(buffer);
     fclose(fp);
     free(filename_str);
+    free(buffer);
     return rt_Data_str(strbuf);
 }
 

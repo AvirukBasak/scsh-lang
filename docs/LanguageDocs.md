@@ -1,4 +1,4 @@
-**Last updated on July 9th, 2024**
+**Last updated on July 12th, 2024**
 
 The following is a documentation of the syntax and behaviour of the language.
 
@@ -896,7 +896,7 @@ The language supports the following built-in procedures (within built-in modules
     - `ANDROID` for Android
     - `BSD`, `SOLARIS` or `LINUX` - `UNIX` if Unix platform is not recognized
     - `POSIX` for POSIX compliant systems not in the above list
-- `sys:system(str)` not yeat implemended; executes the command and `[stdout: str, stderr: str, exit_code: i64]` is returned
+- `sys:system(str)` executes the command and `[status: i64, stdout: str, stderr: str]` is returned; `stdout` and `stderr` could be `null`
 - `sys:sleep(i64)` sleeps for the specified number of milliseconds
 
 #### Module `assert`
