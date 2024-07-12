@@ -56,17 +56,25 @@ rt_Data_t rt_fn_sys_platform()
 
 rt_Data_t rt_fn_sys_system()
 {
-    rt_throw("function 'system' is not yet implemented");
-
     const rt_DataList_t *args = rt_fn_get_valid_args(1);
     const rt_Data_t data = *rt_DataList_getref(args, 0);
     rt_Data_assert_type(data, rt_DATA_TYPE_STR, "arg 0");
 
     char *cmd = rt_Data_tostr(data);
-    int ret = system(cmd);
+    char *outbuff = NULL, *errbuff = NULL;
+    int ret = util_system(cmd, &outbuff, &errbuff);
     free(cmd);
-    return rt_Data_i64(ret);
 
+    rt_DataList_t *retlist = rt_DataList_from(
+        rt_Data_i64(ret),
+        outbuff ? rt_Data_str(rt_DataStr_init(outbuff)) : rt_Data_null(),
+        errbuff ? rt_Data_str(rt_DataStr_init(errbuff)) : rt_Data_null()
+    );
+
+    free(outbuff);
+    free(errbuff);
+
+    return rt_Data_list(retlist);
 }
 
 #else
