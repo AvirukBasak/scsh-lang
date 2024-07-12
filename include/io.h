@@ -10,6 +10,7 @@
     return value is the length of string read. */
 ssize_t io_getline(char **lineptr, size_t *n, FILE *stream);
 
+char *io_readfile(FILE *file);
 long long io_get_filesize(const char *filepath);
 char **io_read_lines(const char *filepath, size_t *line_cnt);
 
