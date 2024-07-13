@@ -23,6 +23,7 @@ Version `1.x` will be maintained for bug fixes and minor improvements.
 ```
 git clone https://github.com/AvirukBasak/shsc-lang.git
 cd shsc-lang
+git submodule update --init
 git pull --recurse-submodules
 ```
 
