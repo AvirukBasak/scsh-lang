@@ -46,3 +46,5 @@ clean:
 cleaner:
 	@cd libavl && $(MAKE) cleaner
 	@cd libshsc && $(MAKE) cleaner
+	@rm -f libavl.a libavl-dbg.a
+	@rm -f libshsc.a libshsc-dbg.a
