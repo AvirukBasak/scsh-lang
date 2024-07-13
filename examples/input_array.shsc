@@ -1,0 +1,8 @@
+proc main()
+  var n = io:input("Enter no. of no.s: ", Types.I64)
+  var arr = [0] * n
+  for i from 0 to it:len(arr) do
+    arr[i] = io:input(f"Enter arr[{i}]: ", Types.I64)
+  end
+  io:println(arr)
+end
