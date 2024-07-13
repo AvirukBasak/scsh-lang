@@ -16,6 +16,7 @@ To learn more about the language, read [`docs/LanguageDocs.md`](docs/LanguageDoc
 ```
 git clone https://github.com/AvirukBasak/shsc-lang.git
 cd shsc-lang
+git submodule update --init
 git pull --recurse-submodules
 ```
 
