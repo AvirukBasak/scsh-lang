@@ -69,9 +69,9 @@ rt_Data_t *rt_eval_Expression_operand(
         oprnd_data, *RT_VTABLE_ACC, false, false);
 
     if ( (oprnd_type == EXPR_TYPE_EXPRESSION || oprnd_type == EXPR_TYPE_LITERAL)
-        && (   oprnd_data->type == DATA_TYPE_STR || oprnd_data->type == DATA_TYPE_INTERP_STR
-           ||  oprnd_data->type == DATA_TYPE_LST || oprnd_data->type == DATA_TYPE_MAP
-           ||  oprnd_data->type == DATA_TYPE_LAMBDA || oprnd_data->type == rt_DATA_TYPE_LIBHANDLE )) {
+        && (   oprnd_data->type == rt_DATA_TYPE_STR || oprnd_data->type == rt_DATA_TYPE_INTERP_STR
+           ||  oprnd_data->type == rt_DATA_TYPE_LST || oprnd_data->type == rt_DATA_TYPE_MAP
+           ||  oprnd_data->type == rt_DATA_TYPE_LAMBDA || oprnd_data->type == rt_DATA_TYPE_LIBHANDLE )) {
         /* if operand is obtained after evaluation of an expression or
            literal and if data is a composite type then put the intermediate
            value in the var table to ensure that that references to its

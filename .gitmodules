@@ -1,3 +1,6 @@
 [submodule "lib/libshsc"]
 	path = lib/libshsc
 	url = https://github.com/AvirukBasak/shsc-c-interop
+[submodule "lib/libavl"]
+	path = lib/libavl
+	url = https://github.com/AvirukBasak/libavl
