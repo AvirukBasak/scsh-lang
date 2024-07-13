@@ -17,21 +17,15 @@ DBG            := gdb -q
 
 ## go on listing your libraries below for compilation
 
-## libdummy
-
-$(LIB_DIR)/libdummy.a:
-	@cd libdummy && $(MAKE)
-
-$(LIB_DIR)/libdummy-dbg.a:
-	@cd libdummy && $(MAKE) dbg
-
 ## libavl
 
 $(LIB_DIR)/libavl.a:
 	@cd libavl && $(MAKE)
+	@cp libavl/target/libavl.a ./libavl.a
 
 $(LIB_DIR)/libavl-dbg.a:
 	@cd libavl && $(MAKE) dbg
+	@cp libavl/target/libavl-dbg.a ./libavl-dbg.a
 
 ## libshsc
 
@@ -46,11 +40,9 @@ $(LIB_DIR)/libshsc-dbg.a:
 ## cleanup
 
 clean:
-	@cd libdummy && $(MAKE) clean
 	@cd libavl && $(MAKE) clean
 	@cd libshsc && $(MAKE) clean
 
 cleaner:
-	@cd libdummy && $(MAKE) cleaner
 	@cd libavl && $(MAKE) cleaner
 	@cd libshsc && $(MAKE) cleaner
