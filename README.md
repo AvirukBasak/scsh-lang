@@ -18,6 +18,14 @@ Version `1.x` will be maintained for bug fixes and minor improvements.
     - `make` To build
     - `bison` To generate parser
     - A C compiler (eg `gcc`)
+
+### Clone
+```
+git clone https://github.com/AvirukBasak/shsc-lang.git
+cd shsc-lang
+git pull --recurse-submodules
+```
+
 #### Linux
 - Build with `install.sh`
 - Executable path is `target/shsc-rel`
