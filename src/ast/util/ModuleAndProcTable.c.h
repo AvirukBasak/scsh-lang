@@ -23,6 +23,7 @@
 #include "globals.h"
 #include "io.h"
 #include "parser.h"
+#include "runtime/functions.h"
 #include "runtime/io.h"
 #include "tlib/khash/khash.h"
 
@@ -34,6 +35,23 @@ void ast_util_ModuleAndProcTable_create(void)
 {
     if (ast_util_mptable) return;
     ast_util_mptable = kh_init(ast_module_t);
+
+    /* add inbuilt modules */
+    if (!rt_fn_init_inbuilt_modules) {
+        rt_fn_init_inbuilt_modules = true;
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_SYS);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_ASSERT);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_DBG);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_IO);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_IT);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_CHR);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_I64);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_F64);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_STR);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_LST);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_MAP);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_NOMOD);
+    }
 }
 
 bool ast_util_ModuleAndProcTable_empty(void)

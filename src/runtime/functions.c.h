@@ -273,23 +273,6 @@ rt_Data_t rt_fn_call_handler(
     const char *proc_name,
     rt_DataList_t *args
 ) {
-
-    if (!rt_fn_init_inbuilt_modules) {
-        rt_fn_init_inbuilt_modules = true;
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_SYS);
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_ASSERT);
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_DBG);
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_IO);
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_IT);
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_CHR);
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_I64);
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_F64);
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_STR);
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_LST);
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_MAP);
-        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_NOMOD);
-    }
-
     const ast_Identifier_t *module = (const ast_Identifier_t*) module_name;
     const ast_Identifier_t *proc = (const ast_Identifier_t*) proc_name;
 

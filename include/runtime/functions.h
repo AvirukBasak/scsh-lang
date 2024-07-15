@@ -15,6 +15,8 @@
 #include "runtime/functions/module_str.h"
 #include "runtime/functions/nomodule.h"
 
+extern bool rt_fn_init_inbuilt_modules;
+
 /* define module names */
 #define RT_FN_MODULE_SYS     "sys"
 #define RT_FN_MODULE_ASSERT  "assert"
