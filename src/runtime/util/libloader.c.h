@@ -34,6 +34,8 @@ void rt_util_libloader(void *handle) {
         rt_Data_any,
         rt_Data_null,
         rt_Data_clone,
+        rt_Data_increfc,
+        rt_Data_decrefc,
         rt_Data_destroy,
         rt_Data_isnull,
         rt_Data_isnumeric,
