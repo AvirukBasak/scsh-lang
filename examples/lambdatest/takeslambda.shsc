@@ -1,0 +1,12 @@
+module takeslambda
+
+proc take(lambda)
+    return deep_take(lambda)
+end
+
+proc deep_take(lambda)
+    assert:type(lambda, Types.LAMBDA)
+    io:println("takeslambda:deep_take", dbg:filename())
+    return lambda(1, 2)
+end
+    
