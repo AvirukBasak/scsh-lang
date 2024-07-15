@@ -118,14 +118,17 @@ rt_fn_FunctionDescriptor_t rt_fn_FunctionsList_getfn(const char *module, const c
         if (!strcmp(fname, "lockonce")) return rt_fn_MAP_LOCKONCE;
     }
 
-    if (!strcmp(fname, "isnull"))       return rt_fn_ISNULL;
-    if (!strcmp(fname, "tostr"))        return rt_fn_TOSTR;
-    if (!strcmp(fname, "type"))         return rt_fn_TYPE;
-    if (!strcmp(fname, "cast"))         return rt_fn_CAST;
-    if (!strcmp(fname, "errndie"))      return rt_fn_ERRNDIE;
-    if (!strcmp(fname, "max"))          return rt_fn_MAX;
-    if (!strcmp(fname, "min"))          return rt_fn_MIN;
-    if (!strcmp(fname, "rand"))         return rt_fn_RAND;
+    if (!strcmp(module, rt_VarTable_top_proc()->module_name)
+     || !strcmp(module, RT_FN_MODULE_NOMOD)) {
+        if (!strcmp(fname, "isnull"))   return rt_fn_ISNULL;
+        if (!strcmp(fname, "tostr"))    return rt_fn_TOSTR;
+        if (!strcmp(fname, "type"))     return rt_fn_TYPE;
+        if (!strcmp(fname, "cast"))     return rt_fn_CAST;
+        if (!strcmp(fname, "errndie"))  return rt_fn_ERRNDIE;
+        if (!strcmp(fname, "max"))      return rt_fn_MAX;
+        if (!strcmp(fname, "min"))      return rt_fn_MIN;
+        if (!strcmp(fname, "rand"))     return rt_fn_RAND;
+    }
 
     return rt_fn_UNDEFINED;
 }
@@ -270,6 +273,23 @@ rt_Data_t rt_fn_call_handler(
     const char *proc_name,
     rt_DataList_t *args
 ) {
+
+    if (!rt_fn_init_inbuilt_modules) {
+        rt_fn_init_inbuilt_modules = true;
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_SYS);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_ASSERT);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_DBG);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_IO);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_IT);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_CHR);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_I64);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_F64);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_STR);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_LST);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_MAP);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_NOMOD);
+    }
+
     const ast_Identifier_t *module = (const ast_Identifier_t*) module_name;
     const ast_Identifier_t *proc = (const ast_Identifier_t*) proc_name;
 
