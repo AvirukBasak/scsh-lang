@@ -74,3 +74,26 @@ if ! git diff --quiet --exit-code tests/SyntaxTree.json; then
     echo 'test.sh: error: SyntaxTree.json has changed.' >&2
     exit 1
 fi
+
+# finally, test the eaxmple at submodule lib/libshsc
+echo -e "\n-----------------------------------------------------\n"
+echo -e ">> Running lib/libshsc/examples/add.shsc\n"
+
+# if pwd base is tests/, go up one level
+if [[ "$PWD" == *tests ]]; then
+    cd ..
+fi
+
+cd lib/libshsc
+make cleaner; make dbg
+
+# choose extension based on platform
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    gcc -Iinclude -shared -fPIC -o examples/add.so examples/add.c -Ltarget -lshsc-dbg
+elif [[ "$OSTYPE" == "msys" ]]; then
+    gcc -Iinclude -shared -fPIC -o examples/add.dll examples/add.c -Ltarget -lshsc-dbg
+fi
+
+../../target/shsc-dbg examples/add.shsc
+rm -f examples/add.so examples/add.dylib examples/add.dll
+cd ../../
