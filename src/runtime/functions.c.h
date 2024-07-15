@@ -5,31 +5,35 @@
 
 #include "ast.h"
 #include "ast/api.h"
+#include "ast/util/ModuleAndProcTable.h"
 #include "io.h"
 #include "runtime/data/Data.h"
 #include "runtime/data/DataList.h"
 #include "runtime/eval.h"
 #include "runtime/functions.h"
 #include "runtime/io.h"
+#include "runtime/VarTable.h"
+
+bool rt_fn_init_inbuilt_modules = false;
 
 rt_fn_FunctionDescriptor_t rt_fn_FunctionsList_getfn(const char *module, const char *fname)
 {
     /* if module matched but procedure didn't match, it should cascade down.
        this is done so that if all matches fail, you can still match the procedures
        that don't have a module name */
-    if (!strcmp(module, "sys")) {
+    if (!strcmp(module, RT_FN_MODULE_SYS)) {
         if (!strcmp(fname, "exit"))     return rt_fn_SYS_EXIT;
         if (!strcmp(fname, "sleep"))    return rt_fn_SYS_SLEEP;
         if (!strcmp(fname, "getenv"))   return rt_fn_SYS_GETENV;
         if (!strcmp(fname, "platform")) return rt_fn_SYS_PLATFORM;
         if (!strcmp(fname, "system"))   return rt_fn_SYS_SYSTEM;
     }
-    if (!strcmp(module, "assert")) {
+    if (!strcmp(module, RT_FN_MODULE_ASSERT)) {
         if (!strcmp(fname, "type"))     return rt_fn_ASSERT_TYPE;
         if (!strcmp(fname, "equals"))   return rt_fn_ASSERT_EQUALS;
         if (!strcmp(fname, "notnull"))  return rt_fn_ASSERT_NOTNULL;
     }
-    if (!strcmp(module, "dbg")) {
+    if (!strcmp(module, RT_FN_MODULE_DBG)) {
         if (!strcmp(fname, "typename")) return rt_fn_DBG_TYPENAME;
         if (!strcmp(fname, "rtsize"))   return rt_fn_DBG_RTSIZE;
         if (!strcmp(fname, "refcnt"))   return rt_fn_DBG_REFCNT;
@@ -40,7 +44,7 @@ rt_fn_FunctionDescriptor_t rt_fn_FunctionsList_getfn(const char *module, const c
         if (!strcmp(fname, "timenow"))  return rt_fn_DBG_TIMENOW;
         if (!strcmp(fname, "timenow_param")) return rt_fn_DBG_TIMENOW_PARAM;
     }
-    if (!strcmp(module, "io")) {
+    if (!strcmp(module, RT_FN_MODULE_IO)) {
         if (!strcmp(fname, "print"))    return rt_fn_IO_PRINT;
         if (!strcmp(fname, "println"))  return rt_fn_IO_PRINTLN;
         if (!strcmp(fname, "input"))    return rt_fn_IO_INPUT;
@@ -51,11 +55,11 @@ rt_fn_FunctionDescriptor_t rt_fn_FunctionsList_getfn(const char *module, const c
         if (!strcmp(fname, "libopen"))  return rt_fn_IO_LIBOPEN;
         if (!strcmp(fname, "libsym"))   return rt_fn_IO_LIBSYM;
     }
-    if (!strcmp(module, "it")) {
+    if (!strcmp(module, RT_FN_MODULE_IT)) {
         if (!strcmp(fname, "len"))      return rt_fn_IT_LEN;
         if (!strcmp(fname, "clone"))    return rt_fn_IT_CLONE;
     }
-    if (!strcmp(module, "chr")) {
+    if (!strcmp(module, RT_FN_MODULE_CHR)) {
         if (!strcmp(fname, "isdigit"))  return rt_fn_CHR_ISDIGIT;
         if (!strcmp(fname, "isalpha"))  return rt_fn_CHR_ISALPHA;
         if (!strcmp(fname, "isalnum"))  return rt_fn_CHR_ISALNUM;
@@ -65,15 +69,15 @@ rt_fn_FunctionDescriptor_t rt_fn_FunctionsList_getfn(const char *module, const c
         if (!strcmp(fname, "max"))      return rt_fn_CHR_MAX;
         if (!strcmp(fname, "min"))      return rt_fn_CHR_MIN;
     }
-    if (!strcmp(module, "i64")) {
+    if (!strcmp(module, RT_FN_MODULE_I64)) {
         if (!strcmp(fname, "max"))      return rt_fn_I64_MAX;
         if (!strcmp(fname, "min"))      return rt_fn_I64_MIN;
     }
-    if (!strcmp(module, "f64")) {
+    if (!strcmp(module, RT_FN_MODULE_F64)) {
         if (!strcmp(fname, "max"))      return rt_fn_F64_MAX;
         if (!strcmp(fname, "min"))      return rt_fn_F64_MIN;
     }
-    if (!strcmp(module, "str")) {
+    if (!strcmp(module, RT_FN_MODULE_STR)) {
         if (!strcmp(fname, "equals"))   return rt_fn_STR_EQUALS;
         if (!strcmp(fname, "compare"))  return rt_fn_STR_COMPARE;
         if (!strcmp(fname, "tolower"))  return rt_fn_STR_TOLOWER;
@@ -90,7 +94,7 @@ rt_fn_FunctionDescriptor_t rt_fn_FunctionsList_getfn(const char *module, const c
         if (!strcmp(fname, "tof64"))    return rt_fn_STR_TOF64;
         if (!strcmp(fname, "sort"))     return rt_fn_STR_SORT;
     }
-    if (!strcmp(module, "lst")) {
+    if (!strcmp(module, RT_FN_MODULE_LST)) {
         if (!strcmp(fname, "equals"))   return rt_fn_LST_EQUALS;
         if (!strcmp(fname, "compare"))  return rt_fn_LST_COMPARE;
         if (!strcmp(fname, "append"))   return rt_fn_LST_APPEND;
@@ -104,7 +108,7 @@ rt_fn_FunctionDescriptor_t rt_fn_FunctionsList_getfn(const char *module, const c
         if (!strcmp(fname, "sort"))     return rt_fn_LST_SORT;
     }
 
-    if (!strcmp(module, "map")) {
+    if (!strcmp(module, RT_FN_MODULE_MAP)) {
         if (!strcmp(fname, "set"))      return rt_fn_MAP_SET;
         if (!strcmp(fname, "get"))      return rt_fn_MAP_GET;
         if (!strcmp(fname, "erase"))    return rt_fn_MAP_ERASE;
@@ -114,14 +118,17 @@ rt_fn_FunctionDescriptor_t rt_fn_FunctionsList_getfn(const char *module, const c
         if (!strcmp(fname, "lockonce")) return rt_fn_MAP_LOCKONCE;
     }
 
-    if (!strcmp(fname, "isnull"))       return rt_fn_ISNULL;
-    if (!strcmp(fname, "tostr"))        return rt_fn_TOSTR;
-    if (!strcmp(fname, "type"))         return rt_fn_TYPE;
-    if (!strcmp(fname, "cast"))         return rt_fn_CAST;
-    if (!strcmp(fname, "errndie"))      return rt_fn_ERRNDIE;
-    if (!strcmp(fname, "max"))          return rt_fn_MAX;
-    if (!strcmp(fname, "min"))          return rt_fn_MIN;
-    if (!strcmp(fname, "rand"))         return rt_fn_RAND;
+    if (!strcmp(module, rt_VarTable_top_proc()->module_name)
+     || !strcmp(module, RT_FN_MODULE_NOMOD)) {
+        if (!strcmp(fname, "isnull"))   return rt_fn_ISNULL;
+        if (!strcmp(fname, "tostr"))    return rt_fn_TOSTR;
+        if (!strcmp(fname, "type"))     return rt_fn_TYPE;
+        if (!strcmp(fname, "cast"))     return rt_fn_CAST;
+        if (!strcmp(fname, "errndie"))  return rt_fn_ERRNDIE;
+        if (!strcmp(fname, "max"))      return rt_fn_MAX;
+        if (!strcmp(fname, "min"))      return rt_fn_MIN;
+        if (!strcmp(fname, "rand"))     return rt_fn_RAND;
+    }
 
     return rt_fn_UNDEFINED;
 }

@@ -1,0 +1,7 @@
+proc main()
+    var lambda = proc (a, b) {
+        io:println("main:main:(anonymous)", dbg:filename())
+        return a + b
+    }
+    takeslambda:take(lambda)
+end

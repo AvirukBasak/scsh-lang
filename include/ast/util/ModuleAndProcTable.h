@@ -80,6 +80,9 @@ extern ast_util_ModuleAndProcTable_t ast_util_mptable;
 
 bool ast_util_ModuleAndProcTable_empty(void);
 
+/** insert an empty module */
+void ast_util_ModuleAndProcTable_addmodule(const ast_Identifier_t *module_name);
+
 /** Maps ( module_name, proc_name ) -> code */
 void ast_util_ModuleAndProcTable_add(
     const ast_Identifier_t *module_name,
@@ -96,6 +99,9 @@ const ast_FnArgsList_t *ast_util_ModuleAndProcTable_get_args(const ast_Identifie
 
 /** Get filename by a module and a procedure name */
 const char *ast_util_ModuleAndProcTable_get_filename(const ast_Identifier_t *module_name, const ast_Identifier_t *proc_name);
+
+/** Check if a module is defined */
+bool ast_util_ModuleAndProcTable_hasmodule(const ast_Identifier_t *module_name);
 
 /** Check if a module and a procedure name is defined */
 bool ast_util_ModuleAndProcTable_exists(const ast_Identifier_t *module_name, const ast_Identifier_t *proc_name);

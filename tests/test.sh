@@ -59,10 +59,32 @@ make run-sanitize ARGS="$testpath/inheritance/*.shsc -args 123 abc 1 2 3"
 testpath="$(cd "$(dirname "$0")" && pwd)/../tests"
 testpath="$(realpath "$testpath")"
 
+# test the eaxmple at submodule lib/libshsc
+echo -e "\n-----------------------------------------------------\n"
+echo -e ">> Running lib/libshsc/examples/add.shsc\n"
 
+# if pwd base is tests/, go up one level
+if [[ "$PWD" == *tests ]]; then
+    cd ..
+fi
+
+cd lib/libshsc
+make cleaner; make dbg
+
+# choose extension based on platform
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    gcc -Iinclude -shared -fPIC -o examples/add.so examples/add.c -Ltarget -lshsc-dbg
+elif [[ "$OSTYPE" == "msys" ]]; then
+    gcc -Iinclude -shared -fPIC -o examples/add.dll examples/add.c -Ltarget -lshsc-dbg
+fi
+
+../../target/shsc-dbg examples/add.shsc
+rm -f examples/add.so examples/add.dylib examples/add.dll
+cd ../../
+
+# flag -tf test
 echo -e "\n-----------------------------------------------------\n"
 echo -e ">> Bulk running using examples/inheritance/listfile\n"
-# flag -tf test
 # run make run-sanitize ARGS="-tf tests/SyntaxTree.json -r examples/inheritance/listfile"
 # test fails if theres a difference between old and new SyntaxTree.json
 # this can be checked with git

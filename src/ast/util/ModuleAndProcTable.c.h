@@ -10,6 +10,7 @@
 #ifndef AST_UTIL_MODULE_AND_PROC_TABLE_C_H
 #define AST_UTIL_MODULE_AND_PROC_TABLE_C_H
 
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -22,6 +23,7 @@
 #include "globals.h"
 #include "io.h"
 #include "parser.h"
+#include "runtime/functions.h"
 #include "runtime/io.h"
 #include "tlib/khash/khash.h"
 
@@ -33,11 +35,40 @@ void ast_util_ModuleAndProcTable_create(void)
 {
     if (ast_util_mptable) return;
     ast_util_mptable = kh_init(ast_module_t);
+
+    /* add inbuilt modules */
+    if (!rt_fn_init_inbuilt_modules) {
+        rt_fn_init_inbuilt_modules = true;
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_SYS);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_ASSERT);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_DBG);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_IO);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_IT);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_CHR);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_I64);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_F64);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_STR);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_LST);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_MAP);
+        ast_util_ModuleAndProcTable_addmodule(RT_FN_MODULE_NOMOD);
+    }
 }
 
 bool ast_util_ModuleAndProcTable_empty(void)
 {
     return !ast_util_mptable;
+}
+
+void ast_util_ModuleAndProcTable_addmodule(const ast_Identifier_t *module_name)
+{
+    if (!module_name)
+        io_errndie("ast_util_ModuleAndProcTable_addmodule:" ERR_MSG_NULLPTR " for `module_name`");
+    if (!ast_util_mptable) ast_util_ModuleAndProcTable_create();
+    int ret;
+    char *key = strdup(module_name);
+    khint_t k = kh_put(ast_module_t, ast_util_mptable, key, &ret);
+    kh_value(ast_util_mptable, k).module_name = key;
+    kh_value(ast_util_mptable, k).procmap = kh_init(ast_procedure_t);
 }
 
 /** Maps ( module_name, proc_name ) -> code */
@@ -134,6 +165,14 @@ const char *ast_util_ModuleAndProcTable_get_filename(const ast_Identifier_t *mod
 {
     const ast_util_ModuleAndProcTable_procedure_t proc = ast_util_ModuleAndProcTable_get(module_name, proc_name);
     return proc.src_filename;
+}
+
+/** Check if a module is defined */
+bool ast_util_ModuleAndProcTable_hasmodule(const ast_Identifier_t *module_name)
+{
+    if (!ast_util_mptable) return false;
+    khint_t k = kh_get(ast_module_t, ast_util_mptable, module_name);
+    return k != kh_end(ast_util_mptable);
 }
 
 bool ast_util_ModuleAndProcTable_exists(const ast_Identifier_t *module_name, const ast_Identifier_t *proc_name)
