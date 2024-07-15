@@ -15,6 +15,20 @@
 #include "runtime/functions/module_str.h"
 #include "runtime/functions/nomodule.h"
 
+/* define module names */
+#define RT_FN_MODULE_SYS     "sys"
+#define RT_FN_MODULE_ASSERT  "assert"
+#define RT_FN_MODULE_CHR     "chr"
+#define RT_FN_MODULE_DBG     "dbg"
+#define RT_FN_MODULE_F64     "f64"
+#define RT_FN_MODULE_I64     "i64"
+#define RT_FN_MODULE_IO      "io"
+#define RT_FN_MODULE_IT      "it"
+#define RT_FN_MODULE_STR     "str"
+#define RT_FN_MODULE_LST     "lst"
+#define RT_FN_MODULE_MAP     "map"
+#define RT_FN_MODULE_NOMOD   ""
+
 /**
  rt_fn_<module>_FUNCTION
  for example, if the function descriptor is rt_fn_DBG_REFCNT then
