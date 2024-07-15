@@ -59,23 +59,7 @@ make run-sanitize ARGS="$testpath/inheritance/*.shsc -args 123 abc 1 2 3"
 testpath="$(cd "$(dirname "$0")" && pwd)/../tests"
 testpath="$(realpath "$testpath")"
 
-
-echo -e "\n-----------------------------------------------------\n"
-echo -e ">> Bulk running using examples/inheritance/listfile\n"
-# flag -tf test
-# run make run-sanitize ARGS="-tf tests/SyntaxTree.json -r examples/inheritance/listfile"
-# test fails if theres a difference between old and new SyntaxTree.json
-# this can be checked with git
-make run-sanitize ARGS="-tf tests/SyntaxTree.json -r examples/inheritance/listfile -args 123 abc 1 2 3"
-
-# check if there are any differences between old and new SyntaxTree.json
-# if there are differences, the test fails
-if ! git diff --quiet --exit-code tests/SyntaxTree.json; then
-    echo 'test.sh: error: SyntaxTree.json has changed.' >&2
-    exit 1
-fi
-
-# finally, test the eaxmple at submodule lib/libshsc
+# test the eaxmple at submodule lib/libshsc
 echo -e "\n-----------------------------------------------------\n"
 echo -e ">> Running lib/libshsc/examples/add.shsc\n"
 
@@ -97,3 +81,18 @@ fi
 ../../target/shsc-dbg examples/add.shsc
 rm -f examples/add.so examples/add.dylib examples/add.dll
 cd ../../
+
+# flag -tf test
+echo -e "\n-----------------------------------------------------\n"
+echo -e ">> Bulk running using examples/inheritance/listfile\n"
+# run make run-sanitize ARGS="-tf tests/SyntaxTree.json -r examples/inheritance/listfile"
+# test fails if theres a difference between old and new SyntaxTree.json
+# this can be checked with git
+make run-sanitize ARGS="-tf tests/SyntaxTree.json -r examples/inheritance/listfile -args 123 abc 1 2 3"
+
+# check if there are any differences between old and new SyntaxTree.json
+# if there are differences, the test fails
+if ! git diff --quiet --exit-code tests/SyntaxTree.json; then
+    echo 'test.sh: error: SyntaxTree.json has changed.' >&2
+    exit 1
+fi
