@@ -1,5 +1,38 @@
 {
   "node": "root",
+  "": {
+    "node": "module"
+  },
+  "f64": {
+    "node": "module"
+  },
+  "assert": {
+    "node": "module"
+  },
+  "io": {
+    "node": "module"
+  },
+  "i64": {
+    "node": "module"
+  },
+  "dbg": {
+    "node": "module"
+  },
+  "it": {
+    "node": "module"
+  },
+  "lst": {
+    "node": "module"
+  },
+  "chr": {
+    "node": "module"
+  },
+  "sys": {
+    "node": "module"
+  },
+  "str": {
+    "node": "module"
+  },
   "inher:Derived": {
     "node": "module",
     "init": {
@@ -1068,5 +1101,8 @@
         ]
       }
     }
+  },
+  "map": {
+    "node": "module"
   }
 }
