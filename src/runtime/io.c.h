@@ -16,11 +16,12 @@
 #define RT_IO_THROW_DONT_PRINT_FN ""
 
 #define RT_THROW_EXITCODE(fmt, args) do {                                   \
-    fprintf(stderr, "shsc: " RT_IO_THROW_DONT_PRINT_FN "%s:%d: ",           \
+    fprintf(stderr, "shsc: " RT_IO_THROW_DONT_PRINT_FN ""                   \
         /* rt_VarTable_top_proc()->module_name, */                          \
         /* rt_VarTable_top_proc()->proc_name, */                            \
-        rt_VarTable_top_proc()->filepath,                                   \
-        rt_VarTable_top_proc()->current_line);                              \
+        /* rt_VarTable_top_proc()->filepath,  */                            \
+        /* rt_VarTable_top_proc()->current_line */                          \
+    );                                                                      \
     fflush(stderr);                                                         \
     va_start(args, fmt);                                                    \
     vfprintf(stderr, fmt, args);                                            \

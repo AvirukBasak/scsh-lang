@@ -18,6 +18,7 @@
 #include "runtime/functions.h"
 #include "runtime/functions/module_io.h"
 #include "runtime/VarTable.h"
+#include "util.h"
 
 bool rt_fn_io_input_type_isvalid(enum rt_DataType_t type);
 void rt_fn_io_input_bul(bool *val);
@@ -166,13 +167,20 @@ rt_Data_t rt_fn_io_fexists()
     rt_Data_assert_type(filename, rt_DATA_TYPE_STR, "arg 0");
 
     char *filename_str = rt_Data_tostr(filename);
-    FILE *fp = fopen(filename_str, "r");
+    /* get path relative to the current script dir which can be obtained from the top procedure
+       in the stack */
+    char *currscriptdir = util_dirname((rt_VarTable_top_proc() -1)->filepath);
+    char *filepath_str = util_sjoin("%s/%s", currscriptdir, filename_str);
+    free(filename_str);
+    free(currscriptdir);
+
+    FILE *fp = fopen(filepath_str, "r");
     if (fp) {
         fclose(fp);
-        free(filename_str);
+        free(filepath_str);
         return rt_Data_bul(true);
     }
-    free(filename_str);
+    free(filepath_str);
     return rt_Data_bul(false);
 }
 
@@ -184,17 +192,25 @@ rt_Data_t rt_fn_io_fread()
     rt_Data_assert_type(filename, rt_DATA_TYPE_STR, "arg 0");
 
     char *filename_str = rt_Data_tostr(filename);
-    FILE *fp = fopen(filename_str, "rb");
+    /* get path relative to the current script dir which can be obtained from the top -1
+       procedure in the stack; top procedure is the current procedure */
+    char *currscriptdir = util_dirname((rt_VarTable_top_proc() -1)->filepath);
+    char *filepath_str = util_sjoin("%s/%s", currscriptdir, filename_str);
+    free(filename_str);
+    free(currscriptdir);
+
+
+    FILE *fp = fopen(filepath_str, "rb");
     if (!fp) rt_throw(
         "failed to open file '%s': %s",
-        filename_str,
+        filepath_str,
         strerror(errno)
     );
 
     char *buffer = io_readfile(fp);
     rt_DataStr_t *strbuf = rt_DataStr_init(buffer);
     fclose(fp);
-    free(filename_str);
+    free(filepath_str);
     free(buffer);
     return rt_Data_str(strbuf);
 }
@@ -211,10 +227,17 @@ rt_Data_t rt_fn_io_fwrite()
     size_t bytes = strlen(data_str);
 
     char *filename_str = rt_Data_tostr(filename);
-    FILE *fp = fopen(filename_str, "wb");
+    /* get path relative to the current script dir which can be obtained from the top -1
+       procedure in the stack; top procedure is the current procedure */
+    char *currscriptdir = util_dirname((rt_VarTable_top_proc() -1)->filepath);
+    char *filepath_str = util_sjoin("%s/%s", currscriptdir, filename_str);
+    free(filename_str);
+    free(currscriptdir);
+
+    FILE *fp = fopen(filepath_str, "wb");
     if (!fp) rt_throw(
         "failed to open file '%s': %s",
-        filename_str,
+        filepath_str,
         strerror(errno)
     );
 
@@ -224,11 +247,11 @@ rt_Data_t rt_fn_io_fwrite()
     if (ferror(fp)) {
         fclose(fp);
         rt_throw("failed to write to file '%s': %s",
-            filename_str, strerror(error_num));
+            filepath_str, strerror(error_num));
     }
 
     fclose(fp);
-    free(filename_str);
+    free(filepath_str);
     free(data_str);
     return rt_Data_i64(bytes);
 }
@@ -245,10 +268,17 @@ rt_Data_t rt_fn_io_fappend()
     size_t bytes = strlen(data_str);
 
     char *filename_str = rt_Data_tostr(filename);
-    FILE *fp = fopen(filename_str, "ab");
+    /* get path relative to the current script dir which can be obtained from the top -1
+       procedure in the stack; top procedure is the current procedure */
+    char *currscriptdir = util_dirname((rt_VarTable_top_proc() -1)->filepath);
+    char *filepath_str = util_sjoin("%s/%s", currscriptdir, filename_str);
+    free(filename_str);
+    free(currscriptdir);
+
+    FILE *fp = fopen(filepath_str, "ab");
     if (!fp) rt_throw(
         "failed to open file '%s': %s",
-        filename_str,
+        filepath_str,
         strerror(errno)
     );
 
@@ -258,11 +288,11 @@ rt_Data_t rt_fn_io_fappend()
     if (ferror(fp)) {
         fclose(fp);
         rt_throw("failed to write to file '%s': %s",
-            filename_str, strerror(error_num));
+            filepath_str, strerror(error_num));
     }
 
     fclose(fp);
-    free(filename_str);
+    free(filepath_str);
     free(data_str);
     return rt_Data_i64(bytes);
 }
@@ -278,8 +308,16 @@ rt_Data_t rt_fn_io_libopen()
     const rt_DataList_t *args = rt_fn_get_valid_args(1);
     const rt_Data_t libname_arg = *rt_DataList_getref(args, 0);
     rt_Data_assert_type(libname_arg, rt_DATA_TYPE_STR, "arg 0");
-    char *filename = rt_Data_tostr(libname_arg);
-    rt_DataLibHandle_t *handle = rt_DataLibHandle_init(filename);
+
+    char *filename_str = rt_Data_tostr(libname_arg);
+    /* get path relative to the current script dir which can be obtained from the top -1
+       procedure in the stack; top procedure is the current procedure */
+    char *currscriptdir = util_dirname((rt_VarTable_top_proc() -1)->filepath);
+    char *filepath_str = util_sjoin("%s/%s", currscriptdir, filename_str);
+    free(filename_str);
+    free(currscriptdir);
+
+    rt_DataLibHandle_t *handle = rt_DataLibHandle_init(filepath_str);
     return rt_Data_libhandle(handle);
 }
 

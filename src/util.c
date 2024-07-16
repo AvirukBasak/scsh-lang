@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -116,4 +117,30 @@ int util_system(const char *command, char **outbuff, char **errbuff)
 
     free(cmdbuffer);
     return ret;
+}
+
+char *util_sjoin(const char *fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
+    size_t len = vsnprintf(NULL, 0, fmt, args);
+    va_end(args);
+    char *buffer = malloc(len + 1);
+    if (!buffer) {
+        io_errndie("util_sjoin: couldn't allocate memory");
+    }
+    va_start(args, fmt);
+    vsnprintf(buffer, len + 1, fmt, args);
+    va_end(args);
+    return buffer;
+}
+
+char *util_dirname(const char *path)
+{
+    char *buffer = strdup(path);
+    char *last_slash = strrchr(buffer, '/');
+    if (last_slash) {
+        *last_slash = '\0';
+    }
+    return buffer;
 }

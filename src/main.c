@@ -111,8 +111,21 @@ int main(int argc, char **argv)
     if (!strcmp(argv[argv_index], "-r") || !strcmp(argv[argv_index], "--run")) {
         /* check if there is a list file to load the scripts */
         if (argv_index +1 >= argc) io_errnexit("no list file provided for '--run'");
+        /* get lisfile path */
+        const char *listfilepah = argv[++argv_index];
+        /* get listfile dirname */
+        char *listfiledir = util_dirname(listfilepah);
         /* read the list file */
-        filepaths = io_read_lines(argv[++argv_index], &file_cnt);
+        filepaths = io_read_lines(listfilepah, &file_cnt);
+        /* to each line read, prepend listfiledir
+           this makes all files relative to listfiledir */
+        for (size_t i = 0; i < file_cnt; ++i) {
+            char *newpath = util_sjoin("%s/%s", listfiledir, filepaths[i]);
+            free(filepaths[i]);
+            filepaths[i] = newpath;
+        }
+        /* free listfiledir */
+        free(listfiledir);
         /* set flag to deallocate filepaths */
         from_listfile = true;
         /* go to next argument; --run can work alone */
