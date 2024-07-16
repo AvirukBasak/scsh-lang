@@ -10,8 +10,7 @@ To learn more about the language, read [`docs/LanguageDocs.md`](docs/LanguageDoc
 
 Red version badge indicates discontinued version.  
 
-Version `1.x` has been discontinued. New features will be added to `2.x`.
-Version `1.x` will be maintained for bug fixes and minor improvements.
+Version `1.x` has been discontinued. New features and patches will be added to `2.x`.
 
 ### Build
 - Dependencies:
