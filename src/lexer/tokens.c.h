@@ -126,9 +126,7 @@ const char *lex_Token_getcode(lex_Token_t code)
         /* default cases */
         case TOKEN_EOF:                   return "TOKEN_EOF";
         case TOKEN_INVALID:               return "TOKEN_INVALID";
-        case YYEMPTY:                     return "YYEMPTY";
-        case YYerror:                     return "YYerror";
-        case YYUNDEF:                     return "YYUNDEF";
+        default:                          return "YYINTERNAL";
     }
     return "INTERNAL";
 }
@@ -255,9 +253,7 @@ const char *lex_Token_getsymbol(lex_Token_t code)
         /* default cases */
         case TOKEN_EOF:                   return "end-of-file";
         case TOKEN_INVALID:               return "invalid token";
-        case YYEMPTY:                     return "<YYEMPTY>";
-        case YYerror:                     return "<YYerror>";
-        case YYUNDEF:                     return "<YYUNDEF>";
+        default:                          return "<YYINTERNAL>";
     }
     return "<internal>";
 }

@@ -41,6 +41,12 @@ INCLUDE        := -I $(INCLUDE_DIR) -I $(LIB_DIR) -I $(SRC_DIR)
 LIB            := -L$(LIB_DIR) -lm -lavl     -lshsc
 DBG_LIB        := -L$(LIB_DIR) -lm -lavl-dbg -lshsc-dbg
 
+# On non-windows systems, add -ldl
+ifneq ($(OS),Windows_NT)
+	LIB += -ldl
+	DBG_LIB += -ldl
+endif
+
 LIBRARIES      := $(LIB_DIR)/libavl.a $(LIB_DIR)/libshsc.a
 DBG_LIBRARIES  := $(LIB_DIR)/libavl-dbg.a $(LIB_DIR)/libshsc-dbg.a
 
