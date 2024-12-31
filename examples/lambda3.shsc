@@ -1,0 +1,14 @@
+proc main()
+    var list = [1, 2, 3]
+    var res = foo(list).lamb(6)
+    io:println(res)
+end
+
+proc foo(list)
+    var lamb = proc (x) {
+        var newlist = this.list + [x]
+        io:println(newlist)
+        return lst:join(newlist, "")
+    }
+    return { lamb: lamb, list: list }
+end
