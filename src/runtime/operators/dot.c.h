@@ -1,6 +1,7 @@
 #ifndef RT_OP_DOT_C_H
 #define RT_OP_DOT_C_H
 
+#include "runtime/data/BoxedData.h"
 #include "runtime/data/Data.h"
 #include "runtime/data/DataMap.h"
 #include "runtime/io.h"
@@ -18,19 +19,21 @@ void rt_op_dot(const rt_Data_t *lhs, const rt_Data_t *rhs)
             char *key = rt_Data_tostr(*rhs);
             rt_Data_t *ref = rt_DataMap_getref(lhs->data.mp, key);
             if (ref && ref->type == rt_DATA_TYPE_PROC) {
-                /* setting context object via reference only coz lhs
-                   is a ref to a map
-                   rc is not increased here as it increases when
-                   the fn is actually called when the context variable
-                   is created in scope */
-                ref->data.proc.context = lhs;
+                /* The lhs is boxed and copied to heap before setting context object.
+                   This is done coz lhs may not be a ref to a map or list and may infact
+                   be ref to a popped call stack frame. To do so, original context is
+                   destroyed first. */
+                rt_BoxedData_destroy(&ref->data.proc.context);
+                ref->data.proc.context = rt_BoxedData_from(*lhs);
+                rt_BoxedData_increfc(ref->data.proc.context);
             } else if (ref && ref->type == rt_DATA_TYPE_LAMBDA) {
-                /* setting context object via reference only coz lhs
-                   is a ref to a map
-                   rc is not increased here as it increases when
-                   the fn is actually called when the context variable
-                   is created in scope */
-                ref->data.lambda.context = lhs;
+                /* The lhs is boxed and copied to heap before setting context object.
+                   This is done coz lhs may not be a ref to a map or list and may infact
+                   be ref to a popped call stack frame. To do so, original context is
+                   destroyed first. */
+                rt_BoxedData_destroy(&ref->data.lambda.context);
+                ref->data.lambda.context = rt_BoxedData_from(*lhs);
+                rt_BoxedData_increfc(ref->data.lambda.context);
             }
             rt_VarTable_acc_setadr(ref);
             free(key);

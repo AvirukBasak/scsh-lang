@@ -9,6 +9,7 @@
 #define rt_DATA_LAMBDA_DEFAULT_NAME "(anonymous)"
 
 typedef struct rt_Data_t rt_Data_t;
+typedef struct rt_BoxedData_t rt_BoxedData_t;
 typedef struct rt_DataStr_t rt_DataStr_t;
 typedef struct rt_DataList_t rt_DataList_t;
 typedef struct rt_DataMap_t rt_DataMap_t;
@@ -45,7 +46,7 @@ enum rt_DataType_t {
 struct rt_DataProc_t {
     const ast_Identifier_t *module_name;
     const ast_Identifier_t *proc_name;
-    const rt_Data_t *context;
+    rt_BoxedData_t *context;
 };
 
 enum rt_DataLambdaType_t {
@@ -60,7 +61,7 @@ struct rt_DataNativeFn_t {
 };
 
 struct rt_DataLambda_t {
-    const rt_Data_t *context;
+    rt_BoxedData_t *context;
     union {
         const ast_LambdaLiteral_t *nonnative;
         rt_DataNativeFn_t native;

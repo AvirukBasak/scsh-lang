@@ -12,6 +12,7 @@
 #include "ast/api.h"
 #include "errcodes.h"
 #include "io.h"
+#include "runtime/data/BoxedData.h"
 #include "runtime/data/Data.h"
 #include "runtime/data/DataStr.h"
 #include "runtime/data/DataList.h"
@@ -66,6 +67,7 @@ rt_Data_t rt_Data_f64(double val)
     return var;
 }
 
+#include "runtime/data/BoxedData.c.h"
 #include "runtime/data/DataList.c.h"
 #include "runtime/data/DataStr.c.h"
 #include "runtime/data/DataMap.c.h"
@@ -208,13 +210,16 @@ void rt_Data_increfc(rt_Data_t *var)
                 rt_DataLibHandle_increfc(var->data.lambda.fnptr.native.handle);
                 rt_DataStr_increfc(var->data.lambda.fnptr.native.fn_name);
             }
+            rt_BoxedData_increfc(var->data.lambda.context);
+            break;
+        case rt_DATA_TYPE_PROC:
+            rt_BoxedData_increfc(var->data.proc.context);
             break;
         case rt_DATA_TYPE_BUL:
         case rt_DATA_TYPE_CHR:
         case rt_DATA_TYPE_I64:
         case rt_DATA_TYPE_F64:
         case rt_DATA_TYPE_ANY:
-        case rt_DATA_TYPE_PROC:
             break;
     }
 }
@@ -240,13 +245,16 @@ void rt_Data_decrefc(rt_Data_t *var)
                 rt_DataLibHandle_decrefc(var->data.lambda.fnptr.native.handle);
                 rt_DataStr_decrefc(var->data.lambda.fnptr.native.fn_name);
             }
+            rt_BoxedData_decrefc(var->data.lambda.context);
+            break;
+        case rt_DATA_TYPE_PROC:
+            rt_BoxedData_decrefc(var->data.proc.context);
             break;
         case rt_DATA_TYPE_BUL:
         case rt_DATA_TYPE_CHR:
         case rt_DATA_TYPE_I64:
         case rt_DATA_TYPE_F64:
         case rt_DATA_TYPE_ANY:
-        case rt_DATA_TYPE_PROC:
             break;
     }
 }
@@ -322,12 +330,8 @@ void rt_Data_destroy_circular(rt_Data_t *var, bool flag)
             rt_DataLibHandle_destroy(&var->data.libhandle);
             if (!var->data.libhandle) *var = rt_Data_null();
             break;
-        case rt_DATA_TYPE_ANY:
-        case rt_DATA_TYPE_BUL:
-        case rt_DATA_TYPE_CHR:
-        case rt_DATA_TYPE_I64:
-        case rt_DATA_TYPE_F64:
         case rt_DATA_TYPE_PROC:
+            rt_BoxedData_destroy(&var->data.proc.context);
             /* assigning non-composite data to rt_VarTable_null on destroy
                corrupts data in case *var points to a rt_ global var */
             break;
@@ -338,6 +342,14 @@ void rt_Data_destroy_circular(rt_Data_t *var, bool flag)
                 rt_DataStr_destroy(&lambda.fnptr.native.fn_name);
                 if (!lambda.fnptr.native.handle) *var = rt_Data_null();
             }
+            rt_BoxedData_destroy(&var->data.lambda.context);
+            break;
+        case rt_DATA_TYPE_ANY:
+        case rt_DATA_TYPE_BUL:
+        case rt_DATA_TYPE_CHR:
+        case rt_DATA_TYPE_I64:
+        case rt_DATA_TYPE_F64:
+            break;
         }
     }
 }

@@ -6,6 +6,7 @@
 #include "io.h"
 #include "runtime.h"
 #include "runtime/data/Data.h"
+#include "runtime/data/BoxedData.h"
 #include "runtime/data/DataList.h"
 #include "runtime/eval.h"
 #include "runtime/functions.h"
@@ -28,9 +29,9 @@ void rt_op_fncall(const rt_Data_t *lhs, const rt_Data_t *rhs) {
     rt_Data_t context = rt_Data_null();
 
     if (lhs->type == rt_DATA_TYPE_LAMBDA && lhs->data.lambda.context) {
-        context = *lhs->data.lambda.context;
+        context = *lhs->data.lambda.context->data;
     } else if (lhs->type == rt_DATA_TYPE_PROC && lhs->data.proc.context) {
-        context = *lhs->data.proc.context;
+        context = *lhs->data.proc.context->data;
     }
 
     /* call the lambda or */
