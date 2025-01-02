@@ -30,7 +30,7 @@ ASAN_OPTIONS   := ASAN_OPTIONS=detect_leaks=1:$\
 				  verbosity=0:$\
 				  halt_on_error=0
 
-CC             := gcc
+CC             ?= clang
 CFLAGS         := $(WRN_ERR_FLAGS) -Ofast
 CDBGFLAGS      := $(WRN_ERR_FLAGS) -g $(ASAN_FLAGS) -D DEBUG
 DBG            := gdb -q

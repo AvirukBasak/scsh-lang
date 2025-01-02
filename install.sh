@@ -12,8 +12,8 @@ if ! [ -x "$(command -v bison)" ]; then
   exit 1
 fi
 
-if ! [ -x "$(command -v gcc)" ]; then
-  echo 'install.sh: error: gcc is not installed.' >&2
+if ! [ -x "$(command -v cc)" ]; then
+  echo 'install.sh: error: No C compiler found.' >&2
   exit 1
 fi
 
