@@ -70,9 +70,6 @@ PARSER         := $(INCLUDE_DIR)/parser.yy.h $(SRC_DIR)/parser.yy.c
 
 ## release build
 
-print-cc:
-	@$(CC) --version
-
 rel: $(TARGET)
 
 OBJECTS        := $(patsubst $(SRC_DIR)/%.$(SRCEXT), $(BUILD_DIR)/%-rel.$(OBJEXT), $(shell find $(SRC_DIR)/ -name "*."$(SRCEXT)))
@@ -89,6 +86,9 @@ PREFIX_SUBSTRING := $(shell echo $${PREFIX} | cut -c 1-27)
 
 install: $(TARGET)
 	cp $(TARGET) $(PREFIX_SUBSTRING)/usr/bin/$(EXEC_NAME)$(EXE_EXTENSION)
+
+print-cc:
+	@$(CC) --version
 
 ## debug build
 
