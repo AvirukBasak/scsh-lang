@@ -25,7 +25,7 @@
 #include "runtime/data/BoxedData.h"
 #include "runtime/VarTable.h"
 
-rt_BoxedData_t *rt_BoxedData_from(rt_Data_t data)
+rt_BoxedData_t *rt_BoxedData_from(rt_Data_t data, bool is_weak)
 {
     rt_BoxedData_t *bd = (rt_BoxedData_t*) malloc(sizeof(rt_BoxedData_t));
     /* Allocate rt_Data_t in the heap */
@@ -38,7 +38,7 @@ rt_BoxedData_t *rt_BoxedData_from(rt_Data_t data)
 
     /* Assign data from stack rt_Data_t to the one in heap. rt_VarTable_modf
        takes care of reference count of the members of the stack rt_Data_t */
-    rt_VarTable_modf(bd->data, data, false, false);
+    rt_VarTable_modf(bd->data, data, false, is_weak);
 
     return bd;
 }
