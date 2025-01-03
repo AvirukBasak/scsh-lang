@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# check if make, bison and gcc are installed
+# check if make, bison and cc are installed
 if ! [ -x "$(command -v make)" ]; then
   echo 'test.sh: error: make is not installed.' >&2
   exit 1
@@ -11,8 +11,8 @@ if ! [ -x "$(command -v bison)" ]; then
   exit 1
 fi
 
-if ! [ -x "$(command -v gcc)" ]; then
-  echo 'test.sh: error: gcc is not installed.' >&2
+if ! [ -x "$(command -v cc)" ]; then
+  echo 'test.sh: error: No C compiler found.' >&2
   exit 1
 fi
 
@@ -73,9 +73,9 @@ make cleaner; make dbg
 
 # choose extension based on platform
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    gcc -Iinclude -shared -fPIC -o examples/add.so examples/add.c -Ltarget -lshsc-dbg
+    cc -Iinclude -shared -fPIC -o examples/add.so examples/add.c -Ltarget -lshsc-dbg
 elif [[ "$OSTYPE" == "msys" ]]; then
-    gcc -Iinclude -shared -fPIC -o examples/add.dll examples/add.c -Ltarget -lshsc-dbg
+    cc -Iinclude -shared -fPIC -o examples/add.dll examples/add.c -Ltarget -lshsc-dbg
 fi
 
 ../../target/shsc-dbg examples/add.shsc

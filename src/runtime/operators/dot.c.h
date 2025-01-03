@@ -21,18 +21,20 @@ void rt_op_dot(const rt_Data_t *lhs, const rt_Data_t *rhs)
             if (ref && ref->type == rt_DATA_TYPE_PROC) {
                 /* The lhs is boxed and copied to heap before setting context object.
                    This is done coz lhs may not be a ref to a map or list and may infact
-                   be ref to a popped call stack frame. To do so, original context is
-                   destroyed first. */
-                rt_BoxedData_destroy(&ref->data.proc.context);
-                ref->data.proc.context = rt_BoxedData_from(*lhs);
+                   be ref to a popped call stack frame. The original context needs no be
+                   destroyed coz it will be destroyed when the lamda is destroyed. For this
+                   to happen, is_weak is set true so that a circular ref of map -> lambda
+                   -> context -> map does not happen */
+                ref->data.proc.context = rt_BoxedData_from(*lhs, true);
                 rt_BoxedData_increfc(ref->data.proc.context);
             } else if (ref && ref->type == rt_DATA_TYPE_LAMBDA) {
                 /* The lhs is boxed and copied to heap before setting context object.
                    This is done coz lhs may not be a ref to a map or list and may infact
-                   be ref to a popped call stack frame. To do so, original context is
-                   destroyed first. */
-                rt_BoxedData_destroy(&ref->data.lambda.context);
-                ref->data.lambda.context = rt_BoxedData_from(*lhs);
+                   be ref to a popped call stack frame. The original context needs no be
+                   destroyed coz it will be destroyed when the lamda is destroyed. For this
+                   to happen, is_weak is set true so that a circular ref of map -> lambda
+                   -> context -> map does not happen */
+                ref->data.lambda.context = rt_BoxedData_from(*lhs, true);
                 rt_BoxedData_increfc(ref->data.lambda.context);
             }
             rt_VarTable_acc_setadr(ref);

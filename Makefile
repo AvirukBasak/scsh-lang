@@ -32,7 +32,7 @@ ASAN_OPTIONS   := ASAN_OPTIONS=detect_leaks=1:$\
 				  verbosity=0:$\
 				  halt_on_error=0
 
-CC             := gcc
+CC             ?= clang
 CFLAGS         := $(WRN_ERR_FLAGS) -Ofast
 CDBGFLAGS      := $(WRN_ERR_FLAGS) -g $(ASAN_FLAGS) -D DEBUG
 DBG            := gdb -q
@@ -69,6 +69,9 @@ TESTSRC        := $(shell find $(TEST_DIR)/ -name "*."$(SRCEXT))
 PARSER         := $(INCLUDE_DIR)/parser.yy.h $(SRC_DIR)/parser.yy.c
 
 ## release build
+
+print-cc:
+	@$(CC) --version
 
 rel: $(TARGET)
 

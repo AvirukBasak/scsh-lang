@@ -9,8 +9,8 @@ if (-not (Get-Command bison -ErrorAction SilentlyContinue)) {
   exit 1
 }
 
-if (-not (Get-Command gcc -ErrorAction SilentlyContinue)) {
-  Write-Host "install.ps1: error: gcc is not installed."
+if (-not (Get-Command gcc -ErrorAction SilentlyContinue) -and -not (Get-Command clang -ErrorAction SilentlyContinue)) {
+  Write-Host "install.ps1: error: neither gcc nor clang is installed."
   exit 1
 }
 

@@ -10,7 +10,7 @@ To learn more about the language, read [`docs/LanguageDocs.md`](docs/LanguageDoc
 - Dependencies:
     - `make` To build
     - `bison` To generate parser
-    - A C compiler (eg `gcc`)
+    - A C compiler (e.g. GCC or Clang)
 
 ### Clone
 ```

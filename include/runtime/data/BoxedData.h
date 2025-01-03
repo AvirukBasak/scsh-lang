@@ -28,7 +28,12 @@ struct rt_BoxedData_t {
     rt_Data_t *data;
 };
 
-rt_BoxedData_t *rt_BoxedData_from(rt_Data_t data);
+/**
+ * Create a BoxedData object from a rt_Data_t object.
+ * @param data The rt_Data_t object to be boxed. This creates a copy of the data.
+ * @param is_weak If true, the reference count of the object heald by thr rt_Data_t is not incremented. Used for lambda and proc context objects.
+ */
+rt_BoxedData_t *rt_BoxedData_from(rt_Data_t data, bool is_weak);
 void rt_BoxedData_increfc(rt_BoxedData_t *bd);
 void rt_BoxedData_decrefc(rt_BoxedData_t *bd);
 void rt_BoxedData_destroy(rt_BoxedData_t **ptr);

@@ -13,10 +13,13 @@ if %errorlevel% neq 0 (
   exit /b 1
 )
 
-where /q gcc
+where /q gcc 
 if %errorlevel% neq 0 (
-  echo install.bat: error: gcc is not installed.
-  exit /b 1
+  where /q clang
+  if %errorlevel% neq 0 (
+    echo install.bat: error: Neither GCC nor Clang is installed.
+    exit /b 1
+  )
 )
 
 REM run nmake
