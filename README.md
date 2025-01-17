@@ -25,19 +25,24 @@ git pull --recurse-submodules
 - Executable path is `target/shsc-rel`
 
 #### Windows
-- Download [`Git Bash`](https://git-scm.com/)
-- Install Git Bash. Now you can run bash on Windows.
-- Download [`Make`](https://gnuwin32.sourceforge.net/packages/make.htm)
-- Download [`Bison`](https://github.com/lexxmark/winflexbison/releases)
-- Download [`MinGW`](https://github.com/skeeto/w64devkit/releases)
+
+On Windows you can use either of the following toolsets with specific benefits or drawbacks:
+
+| Tool Set                                                        | Recommended     | GNU Make | GDB | Clang | Address Sanitizer (General) | Address Sanitizer (Detect Leaks) |
+|-----------------------------------------------------------------|-----------------|----------|-----|-------|-----------------------------|----------------------------------|
+| [`w64devkit`](https://github.com/skeeto/w64devkit/releases)     | For Usage       | Yes      | Yes | No    | No                          | No                               |
+| [`LLVM MinGW`](https://github.com/mstorsjo/llvm-mingw/releases) | For Development | No       | No  | Yes   | Yes                         | No                               |
+
+##### Additional Links
+- [`GNU Make`](https://gnuwin32.sourceforge.net/packages/make.htm) as build tool
+- [`Bison`](https://github.com/lexxmark/winflexbison/releases) for generating parser
+
+##### Steps
 - Extract the files and place them in some folder
 - Add the necessary paths to the user PATH
 - The user PATH is accessible via `Add or modify user environment variables` or something.
-- Open Git Bash in project root
+- Open CMD in project root
 - Run `install.sh`
-
-For Windows users, you'll need to use `cygwin` or `git bash` to get `make` working.
-Idk if you can compile it on MSVC so give it a shot and maybe contribute an `md` on it.
 
 ### VSCode Syntax Highlighting
 See [`Shsc Syntax Highlighting`](https://github.com/AvirukBasak/shsc-syntax-highlighting)
